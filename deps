@@ -1,0 +1,30 @@
+sudo apt-get install nodejs-legacy   v4.2.6
+#local directory installs
+npm install jfogs
+npm install javascript-obfuscator
+npm install aaencode-cli
+npm install jencrypt
+npm install babel-minify
+npm install confusion
+npm install jsmin
+npm install uglify-es
+npm install qzx-obfuscator
+#npm install closure
+npm install js-beautify
+sudo apt-get install closure-compiler
+sudo apt-get install wine
+
+# clear npm cache
+sudo npm cache clean -f 
+# install node n package
+sudo npm install -g n
+# install most stable node package
+sudo n stable
+# (or install most latest node package)
+sudo n latest
+# link node executable to /usr/bin
+sudo ln -sf /usr/local/n/versions/node/<VERSION>/bin/node /usr/bin/node
+# check node version
+node -v
+# check npm version
+npm -v

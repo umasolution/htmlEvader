@@ -1,0 +1,2189 @@
+<HTML>
+<HEAD>
+<TITLE>js-obfus - obfuscate JavaScript source code 
+programs</TITLE>
+<LINK REV="made" HREF="mailto:bhcompile@daffy.perf.redhat.com">
+</HEAD>
+
+<BODY>
+
+<A NAME="__index__"></A>
+<!-- INDEX BEGIN -->
+
+<UL>
+
+	<LI><A HREF="#name">NAME</A></LI>
+	<LI><A HREF="#synopsis">SYNOPSIS</A></LI>
+	<LI><A HREF="#description">DESCRIPTION</A></LI>
+	<LI><A HREF="#advanced support for protecting dynamic javascript">Advanced support for protecting dynamic JavaScript</A></LI>
+	<LI><A HREF="#advanced support for protecting fragments of dynamic clientside javascript in the statements of serverside language">Advanced support for protecting fragments of dynamic clientside JavaScript in the statements of server-side language</A></LI>
+	<LI><A HREF="#support for ensuring licensing conditions">Support for ensuring licensing conditions</A></LI>
+	<LI><A HREF="#options">OPTIONS</A></LI>
+	<LI><A HREF="#return value">RETURN VALUE</A></LI>
+	<LI><A HREF="#diagnostics">DIAGNOSTICS</A></LI>
+	<LI><A HREF="#examples">EXAMPLES</A></LI>
+	<LI><A HREF="#files">FILES</A></LI>
+	<LI><A HREF="#notes">NOTES</A></LI>
+</UL>
+<!-- INDEX END -->
+
+<HR>
+<P>
+<HR>
+<H1><A NAME="name">NAME</A></H1>
+<P>js-obfus - obfuscate (make more difficult to understand) JavaScript source code 
+programs</P>
+<P>
+<HR>
+<H1><A NAME="synopsis">SYNOPSIS</A></H1>
+<P><STRONG>js-obfus</STRONG> [&nbsp;<STRONG>-v|--version</STRONG>&nbsp;] [&nbsp;<STRONG>--noparsing</STRONG>&nbsp;]
+    [&nbsp;<STRONG>--output-line-len</STRONG>&nbsp;<EM>N</EM>&nbsp;]&nbsp;[&nbsp;<STRONG>--jam</STRONG>&nbsp;<EM>0</EM>|<EM>1</EM>&nbsp;]
+    [&nbsp;<STRONG>--keep-spaces</STRONG>&nbsp;]&nbsp;[&nbsp;<STRONG>--keep-newlines</STRONG>&nbsp;]
+    [&nbsp;<STRONG>--keep-comments</STRONG>&nbsp;]     
+    [&nbsp;<STRONG>--transform-comments</STRONG>]&nbsp;<EM>truncate</EM>|<EM>chars2x</EM>|<EM>nonwhites2x</EM>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<EM>keep-original</EM>|<EM>replace-with-newlines</EM>]
+    [&nbsp;<STRONG>--preserved-top-comments-count</STRONG>&nbsp;<EM>0</EM>&nbsp;]
+    [&nbsp;<STRONG>--bannerhead</STRONG>&nbsp;<EM>filename</EM>]&nbsp;[<STRONG>--bannertail</STRONG>&nbsp;<EM>filename</EM>&nbsp;]
+    [&nbsp;<STRONG>--skip-external-parser</STRONG>&nbsp;]&nbsp;[&nbsp;<STRONG>--skip-all-newlines</STRONG>&nbsp;]
+    [&nbsp;<STRONG>--inline-regexps</STRONG>&nbsp;<EM>disable</EM>|<EM>warn</EM>|<EM>enable</EM>&nbsp;]
+    [&nbsp;<STRONG>--input-encoding</STRONG>&nbsp;<EM>name-of-file-character-encoding</EM>&nbsp;]
+    [&nbsp;<STRONG>--locals-handling</STRONG>&nbsp;<EM>as-others</EM>|<EM>minify-only</EM>|<EM>minify-then-mangle</EM>&nbsp;]
+    [&nbsp;<STRONG>--SN</STRONG>&nbsp;<EM>name_of_SN_sub</EM>]&nbsp;[&nbsp;<STRONG>-o</STRONG>&nbsp;<EM>destination-filename</EM>&nbsp;]
+    [&nbsp;<STRONG>--excludeidentsfile|-x</STRONG>&nbsp;<EM>filename</EM>&nbsp;].. 
+    [&nbsp;<STRONG>--excludeidentsfile-anycase</STRONG>&nbsp;<EM>filename</EM>&nbsp;].. 
+    [&nbsp;<STRONG>-X</STRONG>&nbsp;<EM>filename</EM>&nbsp;]..
+    [&nbsp;<STRONG>--quoted-symbol-names</STRONG>&nbsp;<EM>filename</EM>&nbsp;]..
+    [&nbsp;<STRONG>--suffixes-asis-list</STRONG>&nbsp;<EM>filename</EM>&nbsp;]..
+    [&nbsp;<STRONG>-F</STRONG>&nbsp;<EM>user-defined-mapping-filename</EM>&nbsp;]..
+    [&nbsp;<STRONG>-d</STRONG>&nbsp;<EM>map-filename</EM>&nbsp;]&nbsp;[<STRONG>--embed-map</STRONG>]&nbsp;[&nbsp;<STRONG>-e</STRONG>&nbsp;<EM>encode-count</EM>&nbsp;]
+    [&nbsp;<STRONG>-D</STRONG>&nbsp;<EM>list-of-symbols-filename</EM>&nbsp;]
+    [&nbsp;<STRONG>-i</STRONG>&nbsp;<EM>idents-mangling-params</EM>&nbsp;] 
+    [&nbsp;<STRONG>-n</STRONG>&nbsp;<EM>number-mangling-params</EM>&nbsp;]
+    [&nbsp;<STRONG>-s</STRONG>&nbsp;<EM>string-mangling-params</EM>&nbsp;]    
+    [&nbsp;<STRONG>-c</STRONG>&nbsp;<EM>charcode-mangling-params</EM>&nbsp;]     
+    [&nbsp;<STRONG>-S</STRONG>&nbsp;<EM>server-mode-params</EM>&nbsp;]
+    [&nbsp;<STRONG>-T</STRONG>&nbsp;<EM>time-asserter-params</EM>&nbsp;]&nbsp;[&nbsp;<STRONG>-H</STRONG>&nbsp;<EM>hostname-asserter-params</EM>&nbsp;]
+    [&nbsp;<STRONG>-G</STRONG>&nbsp;<EM>generic-asserter-params</EM>&nbsp;]
+    [&nbsp;<STRONG>-E</STRONG>&nbsp;<EM>extractor-params</EM>&nbsp;]
+    [&nbsp;<STRONG>-O</STRONG>&nbsp;<EM>profile-name</EM>&nbsp;]
+	<EM>file-to-obfuscate</EM></P>
+<P>
+<HR>
+<H1><A NAME="description">DESCRIPTION</A></H1>
+<P>This program turns JavaScript source code files into functionally equivalent
+JavaScript source code that is much more difficult to study, analyze
+and modify - thus providing you control over intellectual property theft.
+It works perfectly with multi-module programs and
+for programs that depend on a lot of third-party modules that are not subject
+to obfuscation. 
+By default it also encodes the obfuscated version of
+the file and makes it self-decoding at runtime thus not requiring any 
+standalone decoder, and making the file completely non-understandable
+by anybody.</P>
+<P>JavaScript Obfuscator also allows to ensure licensing conditions of the code 
+at runtime by providing
+any combination of lifetime period expiration control, 
+advanced hostname checking and generic user-defined checks; in case licensing 
+conditions are not met,
+there is an option to delete obfuscated file automatically, print 
+user-defined message and terminate the execution or ability to execute
+user-implemented code. 
+All checking of licensing conditions are additionally encoded to make them
+very difficult to analyze. The block of code that checks for licensing 
+conditions can't be removed from the obfuscated program since it's 
+made dependant on the initialization functionality performed by 
+that block.</P>
+<P>JavaScript Obfuscator also has auxilary <EM>no-parsing</EM> mode in which it doesn't try to
+obfuscate the code at all, code is only encoded in this mode. This mode
+is useful for quick and unperfect source code hiding only. This mode is not
+default one, it can be activated by passing <STRONG>--noparsing</STRONG> commandline
+switch.</P>
+<P>This program typically obfuscates only one JavaScript source file at a time, reading source
+code file from stdin and writing output to stdout. It's possble to request it
+to save the output directly to a file using <STRONG>-o</STRONG> switch. There are special
+aids to protect several files at once, this is done using <EM>multifile</EM>
+``mode'' - see description of it in the documentation of the <STRONG>-S</STRONG> option below.</P>
+<P>All comments are stripped away by default, but this can be switched off
+by passing the <STRONG>--keep-comments</STRONG> switch. It's possible to add comments
+with author and copyright information  to the top and to the end of the
+obfuscated version of the file using options <STRONG>--bannerhead</STRONG> and
+<STRONG>--bannertail</STRONG> respectively. Of course these comments
+will appear in clear text form in the obfuscated file, independant of whether
+encoding was applied to it.</P>
+<P>There a special <STRONG>server</STRONG> mode of operation too - in which JavaScript Obfuscator
+parses its commandline, initializes internal state and starts accepting 
+requests in some way from clients; when a client passes it input to process,
+it obfuscates and encodes given input according to the commandline options
+JavaScript Obfuscator was started with, and returns processed input to the client,
+waiting for a next client's request. See more information on this in the
+documentation for the <STRONG>-S</STRONG> commandline option.</P>
+<P>The obfuscation typically means</P>
+<UL>
+<LI>
+replacing all symbol names it's possible to with the
+non-meaningfull ones, e.g. replacing variable <EM>files</EM> with <EM>zcadaa4fc81</EM>, while
+preserving synaxical and semantical correctness of the source code. Of
+course predefined symbols like <EM>document</EM> and 
+symbols from the third-party or standard libraries the source code uses will 
+be left
+the same so the obfuscated code will still work without requiring to 
+obfuscate those third-party  and standard libraries.
+<P></P>
+<LI>
+substitution of numeric values with the arithmetic 
+expressions using (random or constant for the same numeric value as requested
+by the options) decimial and hexadecimial numeric values that evaluate to the 
+same value
+<P></P>
+<LI>
+using hexadecimial character codes for all characters in strings
+<P></P>
+<LI>
+removing extra white space
+<P></P>
+<LI>
+jamming as much code on each line (of length not more than specified
+using <STRONG>--output-line-len</STRONG> option) as possible if <STRONG>--jam=0</STRONG> is not specified
+<P></P></UL>
+<P>Add to that the fact that the obfuscated code will also be encoded thus 
+making the source code completely unreadable.</P>
+<P>The non-encoded obfuscated code is extremely difficult to understand for a human since
+the name of variables and subroutines and other symbols are totally meaningless
+and hard to remember (e.g. <EM>files</EM> becomes <EM>zcadaa4fc81</EM>). It's possible
+to control most aspects of obfuscation using the commandline switches of the
+JavaScript Obfuscator.</P>
+<P>If the source file uses <EM>eval</EM> for strings that include variable and
+function names,
+then you have to 
+make minor modifications to the file (otherwise, for obvious reasons, 
+after obfuscation the string to be evaled will refer to undeclared variables
+and functions).
+To overcome this, the JavaScript Obfuscator supports a special function named
+<EM>OBJNAME</EM> (it can be changed by the use of <STRONG>--SN</STRONG> switch).
+The special meaning of this function is turned on if its argument is
+a string constant in single quotes.
+The special support is treating its argument as symbol name,
+and mangling the symbol name as all symbols are mangled.
+I.e. <CODE>OBJNAME('myvar')</CODE> becomes <CODE>OBJNAME('MANGLED_myvar')</CODE> (the name of
+functions treated as <EM>OBJNAME</EM> will never become obfuscated - so you
+don't need to include them in exceptions list). Using other way of passing
+arguments to it won't enable the special treating
+so you should use only the supported ways only.
+So it should be used if your code generates strings that are then 
+<EM>eval</EM>'ed - e.g. instead of <CODE>eval('abc = ' + value + &quot;;&quot;)</CODE> you should write
+<CODE>eval(OBJNAME('abc') + &quot; = &quot; + value + &quot;;&quot;)</CODE>.</P>
+<P>Another option is to add <EM>abc</EM> to text file and pass name of that file after
+<STRONG>--quoted-symbol-names</STRONG> option. This will tell  JavaScript Obfuscator  that every string
+that is equal to <EM>``abc''</EM> should be replaced with a string containing mangled name for
+<EM>abc</EM>. By using this functionality, you won't need to use <CODE>OBJNAME</CODE> in your code.</P>
+<P>If you also need to run your code 
+non-obfuscated too, you should cut and paste definition of the <EM>OBJNAME</EM> subroutine
+like this:</P>
+<PRE>
+     function OBJNAME(n) { '';return n; }</PRE>
+<P>In order names of symbols from external libraries not to be mangled,
+you have to specify names of files with exceptions using 
+<STRONG>--excludeidentsfile</STRONG> or <STRONG>--excludeidentsfile-anycase</STRONG> options.
+For convenience, there is a <STRONG>-X</STRONG> switch that can be passed multiplie 
+times to specifies the names of files in which list of 
+exceptions to ignore are stored (useful if e.g. default set of exceptions 
+JavaScript Obfuscator uses is too broad for your project).</P>
+<P>It's possible to request JavaScript Obfuscator to save list of symbols it encountered
+in the file by passing its name using <STRONG>-D</STRONG> switch. This may be useful
+for generating list of exceptions from some library file.</P>
+<P>It's possible to request JavaScript Obfuscator to save the mapping between obfuscated
+symbol names and original symbol names in the external file by passing
+the filename after <STRONG>-d</STRONG> switch.</P>
+<P>Encoding can be controlled with the <STRONG>-e</STRONG> switch, to completely
+turn it off add <CODE>-e 0</CODE> to the js-obfus command line.
+It's possible to
+request to encode part of the input files, leaving some fragments just 
+obfuscated. See more information in the documentation about the <STRONG>-E</STRONG> option,
+in the description of the so-called extractor with name <STRONG>code</STRONG>.</P>
+<P>By default JavaScript Obfuscator perfectly supports JavaScript files in which statements 
+may be terminated with newline, though it's a bad programming style; this
+support for badly-styled sources means that JavaScript Obfuscator may preserve
+unneeded newlines in obfuscated code. If you are sure the file being obfuscated
+doesn't have such newlines, you can get rid of these possible
+unneeded newlines in the obfuscated code by passing <STRONG>--skip-all-newlines</STRONG>
+switch.</P>
+<a name=_dynamic_code></a><P>
+<HR>
+<H1><A NAME="advanced support for protecting dynamic javascript">Advanced support for protecting dynamic JavaScript</A></H1>
+<P>If the program generates or creates dynamic JavaScript using ``print''-like 
+functions (or method of some object), then it's also possible to protect it.
+In order to achieve this, one has to identify which functions or methods
+accept the single string argument that is a text of dynamic JavaScript code,
+specify the names of such objects and their methods separated with
+plus sign immediately 
+after the following commandline parameter:</P>
+<PRE>
+  -O .,handle-dynamic-scripts=1,dynamic-scripts-by=</PRE>
+<P>E.g. if all dynamic JavaScript code is output using methods ``write''
+and ``writeln'' of object ``codeout'', then one has to add the following to the 
+commandline:</P>
+<PRE>
+  -O .,handle-dynamic-scripts=1,dynamic-scripts-by=codeout.write+codeout.writeln</PRE>
+<P>Then the dynamic JavaScript code in the following 2-line file named 
+foo.js:</P>
+<PRE>
+    codeout.write(&quot;foo1 = '&quot; + some_arr[3] + &quot;';some_function(foo1);&quot;);
+    codeout.writeln(&quot;foo1 = '&quot; + (othervar? 12 : 15) + &quot;';other_function(foo1);&quot;);</PRE>
+<P>protected using the following commandline:</P>
+<PRE>
+ js-obfus -e 0 -s none foo.js -O .,handle-dynamic-scripts=1,dynamic-scripts-by=codeout.write+codeout.writeln</PRE>
+<P>will produce the following result:</P>
+<PRE>
+ z621f0012f2.write(&quot;zfc1f0bbd67 = '&quot;+z9231d6e25d[(0x58c+1878-0xcdf)]+
+ &quot;';z0554eb4945(zfc1f0bbd67);&quot;);z621f0012f2.writeln(&quot;zfc1f0bbd67 = '&quot;+(
+ z687818d33b?(0xe31+2396-0x1781):(0xfc6+4826-0x2291))+
+ &quot;';z00425f1261(zfc1f0bbd67);&quot;);</PRE>
+<P>As you can see, the argument of the method can even be calculated using other 
+variables - JavaScript Obfuscator correctly detects what is piece of dynamic JavaScript 
+and what is not. You only have to make sure that nothing except dynamic 
+JavaScript  code is passed as an argument to those functions (i.e. it can't
+be html code); if it's not the case, you will have to alter your source code
+and introduce ``aliases'' - objects that will be used only for processing of
+dynamic JavaScript  code.</P>
+<P>If dynamic JavaScript is passed as an argument of the function (i.e. not a
+method of some object) - just specify function name.</P>
+<P>If dynamic JavaScript is passed as an argument of the method that is invoked
+for a lot of different objects (but for <STRONG>all</STRONG> objects the argument of this
+method is dynamic JavaScript code) - just specify the name of the method.</P>
+<P>
+<HR>
+<H1><A NAME="advanced support for protecting fragments of dynamic clientside javascript in the statements of serverside language">Advanced support for protecting fragments of dynamic clientside JavaScript in the statements of server-side language</A></H1>
+<P>JavaScript Obfuscator also has unique ability to protect dynamic clientside 
+JavaScript code in the statements of almost any server-side language
+(e.g. PHP, JSP, C/C++, ASP or ASP.NET and sometimes Perl). The only 
+requirements for  supported  server-side language is using parenthesis 
+for surrounding function and method arguments and using single or double
+quotes for delimiting string constants - most of the server-side languages
+meet these requirement.</P>
+<P>In order dynamic JavaScript code to be obfuscated, one has to tell
+JavaScript Obfuscator which objects and their methods are used for processing dynamic
+JavaScript code by 
+specifying the names of such objects and their methods separated with
+plus sign immediately 
+after the following commandline parameter:</P>
+<PRE>
+  -E .,handle-dynamic-scripts=1,dynamic-scripts-by=</PRE>
+<P>The limitation is that you will have to add this part of commandline <STRONG>after</STRONG> 
+all other commandline arguments.</P>
+<P>So if we have the following in the file 1.asp:</P>
+<PRE>
+ &lt;script language=javascript&gt;&lt;!--
+ var foo1;
+ function some_function(x) {};
+ function other_function(x) {};
+ &lt;%
+    codeout.write(&quot;foo1 = '&quot; + some_arr[3] + &quot;';some_function(foo1);&quot;);
+    codeout.writeln(&quot;foo1 = '&quot; + (othervar? 12 : 15) + &quot;';other_function(foo1);&quot;);
+  %&gt;
+  --&gt;&lt;/script&gt;</PRE>
+<P>protected using the following commandline:</P>
+<PRE>
+ js-obfus -e 0 -s none foo.asp -E html -E .,handle-dynamic-scripts=1,dynamic-scripts-by=codeout.write+codeout.writeln</PRE>
+<P>will produce the following result:</P>
+<PRE>
+ &lt;script language=javascript&gt;&lt;!--
+ var zfc1f0bbd67;function z0554eb4945(x){};
+ function z00425f1261(x){};&lt;%
+    codeout.write(&quot;zfc1f0bbd67 = '&quot; + some_arr[3] + &quot;';z0554eb4945(zfc1f0bbd67);&quot;);
+    codeout.writeln(&quot;zfc1f0bbd67 = '&quot; + (othervar? 12 : 15) + &quot;';z00425f1261(zfc1f0bbd67);&quot;);
+   %&gt;
+ --&gt;&lt;/script&gt;</PRE>
+<P>If dynamic JavaScript is passed as an argument of the function (i.e. not a
+method of some object) - just specify function name.</P>
+<P>If dynamic JavaScript is passed as an argument of the method that is invoked
+for a lot of different objects (but for <STRONG>all</STRONG> objects the argument of this
+method is dynamic JavaScript code) - just specify the name of the method.</P>
+<P>
+<HR>
+<H1><A NAME="support for ensuring licensing conditions">Support for ensuring licensing conditions</A></H1>
+<P>JavaScript Obfuscator has advanced support for ensuring licensing conditions
+(not available in Trial editions).
+It's possible to ensure licensing conditions by any combination of the
+following criterias:</P>
+<DL>
+<DT><STRONG><A NAME="item_lifetime_expiration">lifetime expiration</A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_hostname_matching">hostname matching</A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_arbitrary_check_implemented_by_user">arbitrary check implemented by user</A></STRONG><BR>
+<DD>
+</DL>
+<P>Each type of checking criterias is implemented by subengines 
+called asserters from here - the specific asserters are called
+time asserters, hostname asserters and generic asserters correpondingly
+from now. There are several subtypes of asserters of each type, each
+with different behaviour; it's possible to enable only one subtype 
+of asserters of a given type (i.e. no more than one time asserter, no
+more than one hostname asserter, etc).</P>
+<P>By default no asserters of any type are enabled.</P>
+<P>If any asserter is enabled, the special block of code is prepended to
+the obfuscated version of original code; if it was requested to additionally
+encode the obfuscated code then the resultant code (special block and
+obfuscated version of original code) will be encoded as a whole.</P>
+<P>In any case that special block of code will actualy be an encoded version
+of the code that will include implementation of all checks and actions
+to be performed in case licensing conditions are not met <STRONG>AND</STRONG> special
+initialization code without which the obfuscated version of original code will
+not work correctly (the special initialization code is in fact
+an initialization of variables used in some part of expressions inside the
+obfuscated version of original code). 
+This means that it's impossible to remove the special block that 
+includes checks for ensuring licensing conditions without making
+the rest of the code malfunctioning, even if user selected to just
+obfuscate (without applying encoding) the original source.</P>
+<P>Asserters are configured from a command line in a similar way to 
+token mangling parameters. Use <STRONG>-T</STRONG> option to configure time asserters,
+<STRONG>-H</STRONG> to configure hostname asserters, <STRONG>-G</STRONG> to configure generic
+asserters. See description of the individual asserters of each type 
+for more information about their options.</P>
+<P>
+<HR>
+<H1><A NAME="options">OPTIONS</A></H1>
+<P>It's possible to store the default commandline options in the globally-visible
+file <EM>$instroot/lib/js-obfus/js-obfus-settings.pl</EM> (where <STRONG>$instroot</STRONG>
+is a directory in which the JavaScript Obfuscator package was installed to). See 
+comments in that file for more information.</P>
+<P>Note that there is interacive web-based commandline builder for JavaScript Obfuscator 
+available at <A HREF="http://www.stunnix.com/support/interactive/cmd-builder/">http://www.stunnix.com/support/interactive/cmd-builder/</A>.</P>
+<DL>
+<DT><STRONG><A NAME="item_%2Dv%7C%2D%2Dversion"><STRONG>-v|--version</STRONG></A></STRONG><BR>
+<DD>
+Output version information and exit.
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Doutput%2Dline%2Dlen_N"><STRONG>--output-line-len</STRONG> <EM>N</EM></A></STRONG><BR>
+<DD>
+Set the maximum line length for the obfuscated file. However, if some string
+constant will be longer than this limit, it won't be split or otherwise 
+wrapped, resulting in a line longer than an amount specified. The default
+value for parameter <EM>N</EM> is <EM>80</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Djam_0%7C1"><STRONG>--jam</STRONG> <EM>0</EM>|<EM>1</EM></A></STRONG><BR>
+<DD>
+Control whether to omit extra white spaces. When argument is <EM>1</EM>, all extra
+white spaces (including carridge returns) are omitted, that makes the
+obfuscated file looking even less readable. 
+When argument is <EM>0</EM>, the obfuscated (but not encoded) file will look 
+like original file with respect to spaces and newlines - in particular it will
+have the same identation.
+By default jamming is enabled (value is <EM>1</EM>).
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Dkeep%2Dspaces"><STRONG>--keep-spaces</STRONG></A></STRONG><BR>
+<DD>
+Request not to skip extra spaces in the lines (whitespaces and tabs) if 
+jamming is  enabled (which is the default). By default 
+extra spaces in the line are ignored if jamming is enabled.
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Dkeep%2Dnewlines"><STRONG>--keep-newlines</STRONG></A></STRONG><BR>
+<DD>
+Request not to skip newlines if jamming is  enabled (which is the default). 
+By default newlines are ignored if jamming is enabled.
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Dskip%2Dall%2Dnewlines"><STRONG>--skip-all-newlines</STRONG></A></STRONG><BR>
+<DD>
+By default JavaScript Obfuscator perfectly supports JavaScript files in which statements 
+may be terminated with newline, though it's a bad programming style; this
+support for badly-styled sources means that JavaScript Obfuscator may preserve
+unneeded newlines in obfuscated code. If you are sure the file being obfuscated
+doesn't have such newlines, you can get rid of these possible
+unneeded newlines in the obfuscated code by passing this switch.
+This option is ignored if <STRONG>--skip-external-parser</STRONG> is not specified.
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Dkeep%2Dcomments"><STRONG>--keep-comments</STRONG></A></STRONG><BR>
+<DD>
+Requests to keep all comments. By default all comments are stripped away.
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Dtransform%2Dcomments_replace%2Dwith%2Dnewlin"><STRONG>--transform-comments</STRONG> <EM>replace-with-newlines</EM>|<EM>truncate</EM>|<EM>chars2x</EM>|<EM>nonwhites2x</EM>|<EM>keep-original</EM></A></STRONG><BR>
+<DD>
+If <STRONG>--keep-comments</STRONG> is specified on the commandline, this option
+specifies what to do with comments.  By default comments are not modified
+(this corresponds to value <EM>keep-original</EM> of this option). The possible
+values for this option are:
+<DL>
+<DT><STRONG><A NAME="item_replace%2Dwith%2Dnewlines"><STRONG>replace-with-newlines</STRONG></A></STRONG><BR>
+<DD>
+If specified, comment delimiters and
+their bodies are removed, and are replaced with newlines contained in the
+comment bodies (thus keeping line numbers in sync with original code, but
+not revealing locations where comments were located).
+<P></P>
+<DT><STRONG><A NAME="item_truncate"><STRONG>truncate</STRONG></A></STRONG><BR>
+<DD>
+If specified, only newlines are kept in bodies of comments.
+<P></P>
+<DT><STRONG><A NAME="item_chars2x"><STRONG>chars2x</STRONG></A></STRONG><BR>
+<DD>
+If specified, newlines are kept in bodies of comments, and all other characters
+including spaces are replaced with character 'x'.
+This is useful to show that original code contained some comments, and
+give an impression on what length of them was.
+<P></P>
+<DT><STRONG><A NAME="item_nonwhites2x"><STRONG>nonwhites2x</STRONG></A></STRONG><BR>
+<DD>
+If specified, newlines are kept in bodies of comments, and all other characters
+except whitespaces are replaced with character 'x', whitespaces are left as is.
+This is useful to show that original code contained some comments, and
+give an impression on what length of them was, and what content they had
+approximately (since a lot of comments in the code happen to be various
+separators formed by repeating some character like dash for entire length
+of the line).
+<P></P>
+<DT><STRONG><A NAME="item_keep%2Doriginal"><STRONG>keep-original</STRONG></A></STRONG><BR>
+<DD>
+If specified, comments are kept as they were in original code. This is
+a default value for this option.
+<P></P></DL>
+<DT><STRONG><A NAME="item_%2D%2Dpreserved%2Dtop%2Dcomments%2Dcount_0"><STRONG>--preserved-top-comments-count</STRONG> <EM>0</EM></A></STRONG><BR>
+<DD>
+Specifies how many topmost comments in each file to be  preserved in the output.
+Often source files start with copyright notice, use this option to preserve it in output files.
+The default value for this option is 0.
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Dbannerhead_filename"><STRONG>--bannerhead</STRONG> <EM>filename</EM></A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_%2D%2Dbannertail_filename"><STRONG>--bannertail</STRONG> <EM>filename</EM></A></STRONG><BR>
+<DD>
+Specify the file whoose content will be prepended or appended to the
+obfuscated file. This is most useful for adding comments with copyright
+and license information. Such comments will be visible as clear text
+in any file that was obfuscated and/or encoded.
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Dskip%2Dexternal%2Dparser"><STRONG>--skip-external-parser</STRONG></A></STRONG><BR>
+<DD>
+Passing this option disables use of external JavaScript parser. In general,
+using this option is not recommended - it makes sense to use it only
+if told by support team.
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Dinline%2Dregexps_disable%7Cwarn%7Cenable"><STRONG>--inline-regexps</STRONG> <EM>disable</EM>|<EM>warn</EM>|<EM>enable</EM></A></STRONG><BR>
+<DD>
+Specify the handling of literal text format of RegExp object's constructors.
+If some file contains expressions that can erroneously be parsed
+as literal text format of RegExp object's constructors, 
+pass <EM>disable</EM> this switch to completely disable recognition of regular 
+expressions. If value passed is <EM>enable</EM> or <EM>warn</EM>, support for
+recognition will be enabled. If value passed is <EM>warn</EM>, JavaScript Obfuscator
+will print the string it treated as regular expression to standard
+error output. The default value for the switch is <EM>enable</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Dinput%2Dencoding_name%2Dof%2Dfile%2Dcharacte"><STRONG>--input-encoding</STRONG> <EM>name-of-file-character-encoding</EM></A></STRONG><BR>
+<DD>
+Specify the name of character encoding that script texts are in.
+Specify character encoding here if you encode your scripts and strings
+in your scripts are not in iso8859-1 encoding. The name of encoding should
+be known to Perl's module Encode.pm (e.g. iso8859-3, or koi8-r).
+The default value for the switch is <EM>none</EM>, which is OK for most of users.
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Dlocals%2Dhandling_as%2Dothers%7Cminify%2Donl"><STRONG>--locals-handling</STRONG> <EM>as-others</EM>|<EM>minify-only</EM>|<EM>minify-then-mangle</EM></A></STRONG><BR>
+<DD>
+Specify handling of local variables (and function arguments). By default, they are
+handled like all other symbols. In case the value of this switch is not
+<EM>as-others</EM>, implementation of JavaScript parser from Mozilla project
+(implemented in Java) is started to analyze javascript code and assign shortest
+possible names to local variables (identically to the way  YUICompressor does it)
+with respect to the scope of local variables. This means in output 
+name A will be assigned to different local variables in different functions.
+<P>In case the code contains syntax errors, fallback behaviour will be used
+(as if value of this option was <EM>as-others</EM>),
+so it still allows you to protect code that looks invalid (e.g. due to presence
+of server-side markup inside javascript code).
+This means that if you specify anything but <EM>as-others</EM> to this switch, Java
+runtime will be very desired, but its absence will not cause a failure.</P>
+<P>If the value of the switch is <EM>minify-only</EM>, the shortest names assigned by Java
+backend will be used in the output, independent from the symbol mangler used
+for non-local variables (e.g. non-local symbols can be md5-mangled, resulting
+in compact and cryptic output).</P>
+<P>If the value of the switch is <EM>minify-then-mangle</EM>, the shortest names assigned
+by Java to local vars are mangled using the same mangler as non-local vars. This
+lets protected output to look more cryptic than when value <EM>as-others</EM> is used,
+since e.g. local variable ``blah'' will get different names in different functions
+(if the value of the option is  <EM>as-others</EM>, the local variable ``blah'' will get
+the same name in each function it's declared and/or used).</P>
+<P>Using Java backend makes protecting slower, so beware.</P>
+<P>The default value for this switch is <EM>as-others</EM>.</P>
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2DSN_name_of_SN_sub"><STRONG>--SN</STRONG> <EM>name_of_SN_sub</EM></A></STRONG><BR>
+<DD>
+Specify the name of the sub that will be treated as <EM>OBJNAME</EM>.
+See above for the description on what this sub is for. Default value
+is of course <EM>OBJNAME</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_%2Do_destination%2Dfilename"><STRONG>-o</STRONG> <EM>destination-filename</EM></A></STRONG><BR>
+<DD>
+Output the obfuscated version to the named file. 
+There is no default value for this option - i.e. 
+the obfuscated file is written to stdout by default.
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Dexcludeidentsfile_filename"><STRONG>--excludeidentsfile</STRONG> <EM>filename</EM></A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_%2Dx_filename"><STRONG>-x</STRONG> <EM>filename</EM></A></STRONG><BR>
+<DD>
+This option can be specified more than once. It allows to specify the names of
+files that contain a list of symbol names that won't be mangled, one symbol 
+per line. 
+Such symbols are called exceptions from this point. 
+Comments are allowed in such files by placing a hash sign (<CODE>#</CODE>)
+as the first character of the line. The file name specified is first searched
+in the current directory (if it's not absolute path), and then in the
+subdirectory <EM>lib/js-obfus/exceptions/</EM> of the directory where
+JavaScript Obfuscator was installed to.
+There is no need to add names of JavaScript pre-defined variables and 
+functions - they are already hardcoded into
+<EM>JavaScript Obfuscator</EM>. The default set of 
+exceptions JavaScript Obfuscator uses can be controlled in the file that stores
+``persistent settings'' for it - located in the 
+<EM>lib/js-obfus/js-obfus-settings.pl</EM> in the directory where 
+JavaScript Obfuscator was installed.
+<P>It's possible to remove symbols from lists of exceptions by passing
+names of files with these symbol names using <STRONG>-X</STRONG> switch.</P>
+<P>The <EM>filename</EM> can be name of directory, in this case all files located
+in this directory and any of its subdirectories (at any depth) are 
+loaded as if the names of these files were specified individually one-by-one.</P>
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Dexcludeidentsfile%2Danycase_filename"><STRONG>--excludeidentsfile-anycase</STRONG> <EM>filename</EM></A></STRONG><BR>
+<DD>
+This option is very similar to <STRONG>--excludeidentsfile</STRONG>, except that symbols
+read from the specified file are treated as case-insensitive exceptions. 
+This functionality is useful for listing methods and properties of ActiveX 
+objects, that are case-insensitive.
+<P>The <EM>filename</EM> can be name of directory, in this case all files located
+in this directory and any of its subdirectories (at any depth) are 
+loaded as if the names of these files were specified individually one-by-one.</P>
+<P></P>
+<DT><STRONG><A NAME="item_%2DX_filename"><STRONG>-X</STRONG> <EM>filename</EM></A></STRONG><BR>
+<DD>
+This option can be specified more than once. It allows to specify the names of
+files that contain a list of symbol names that should be mangled, even
+if those symbol names were in the files with names passed with <STRONG>-x</STRONG> switch
+(i.e. for disabling some exceptions). At first files specified with <STRONG>-x</STRONG>
+switch are processed, and then files specified with <STRONG>-X</STRONG>
+switch are processed.
+<P>Comments are allowed in such files by placing a hash sign (<CODE>#</CODE>)
+as the first character of the line. The file name specified is first searched
+in the current directory (if it's not absolute path), and then in the
+subdirectory <EM>lib/js-obfus/exceptions/</EM> of the directory where
+JavaScript Obfuscator was installed to.</P>
+<P>This option is mostly useful in case the set of exceptions created from
+builtin list and content of files passed with <STRONG>-x</STRONG> switch is too 
+broad.</P>
+<P>The <EM>filename</EM> can be name of directory, in this case all files located
+in this directory and any of its subdirectories (at any depth) are 
+loaded as if the names of these files were specified individually one-by-one.</P>
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Dquoted%2Dsymbol%2Dnames_filename"><STRONG>--quoted-symbol-names</STRONG> <EM>filename</EM></A></STRONG><BR>
+<DD>
+This option can be specified more than once. It allows to specify the names of
+files that contain a list of symbol names that should be mangled, when found in strings.
+The string will be replaced if it contains just symbol name, without any other characters 
+in it. E.g. if the file contains the line <EM>bar</EM>, then the string <EM>``bar''</EM> will be
+replaced with a string, containing replacement used for <EM>bar</EM>, e.g. <EM>``zb4da9ec5''</EM>;
+while the strings <EM>``bar!''</EM> or <EM>``the bar near us''</EM> will not be altered 
+as name <EM>bar</EM> is surrounded by other characters inside those strings.
+<P>This can be seen alternative to using <EM>OBJNAME</EM> function. So instead of wrapping symbol
+names in call of <EM>OBJNAME</EM>, you can just list those symbols in a file and pass name of
+that file after <STRONG>--quoted-symbol-names</STRONG> switch.</P>
+<P>Note that you can use this functionality to hide some hash keys you internally use in your code
+for storing data in various structures or even config files. JavaScript Obfuscator will also accept
+<EM>-</EM> (dash) in names of symbols loaded from <EM>filename</EM>, to allow using keys with dashes.</P>
+<P>Comments are allowed in such files by placing a hash sign (<CODE>#</CODE>)
+as the first character of the line. The file name specified is first searched
+in the current directory (if it's not absolute path), and then in the
+subdirectory <EM>lib/js-obfus/exceptions/</EM> of the directory where
+JavaScript Obfuscator was installed to.</P>
+<P>The <EM>filename</EM> can be name of directory, in this case all files located
+in this directory and any of its subdirectories (at any depth) are 
+loaded as if the names of these files were specified individually one-by-one.</P>
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Dsuffixes%2Dasis%2Dlist_filename"><STRONG>--suffixes-asis-list</STRONG> <EM>filename</EM></A></STRONG><BR>
+<DD>
+This option can be specified more than once. It allows to specify the names of
+files that contain a list of suffixes that should be preserved in
+symbols being mangled. E.g. if suffix <EM>onclick</EM> is listed in some file
+mentioned by this option, then symbol <EM>myButton_onclick</EM> will be
+mangled to something like <EM>z2b9a0ec6d_onclick</EM>, rather than to
+something like <EM>za40f93e635d</EM>.
+<P>Comments are allowed in such files by placing a hash sign (<CODE>#</CODE>)
+as the first character of the line. The file name specified is first searched
+in the current directory (if it's not absolute path), and then in the
+subdirectory <EM>lib/js-obfus/exceptions/</EM> of the directory where
+JavaScript Obfuscator was installed to.</P>
+<P>This option is mostly useful for protecting code for environments, that scan
+name of symbol for some suffix in order to treat the symbol specially.</P>
+<P>The <EM>filename</EM> can be name of directory, in this case all files located
+in this directory and any of its subdirectories (at any depth) are 
+loaded as if the names of these files were specified individually one-by-one.</P>
+<P></P>
+<DT><STRONG><A NAME="item_%2DF_user%2Ddefined%2Dmapping%2Dfilename"><STRONG>-F</STRONG> <EM>user-defined-mapping-filename</EM></A></STRONG><BR>
+<DD>
+This option can be specified more than once. It allows to specify the names of
+files that contain user-specified mapping of symbols.
+<P>Comments are allowed in such files by placing a hash sign (<CODE>#</CODE>)
+as the first character of the line. Each line in such file contains two 
+symbols: name of original symbol, one or more space characters, and required 
+resultant symbol.</P>
+<P>In case some mangling engine decides to assign a symbol that is listed as
+resultant symbol, special attempts will be made to guarantee that the symbol
+chosen by obfuscation engine won't conflict with it (by adding prefixes
+until unqueness is reached).</P>
+<P></P>
+<DT><STRONG><A NAME="item_%2Dd_map%2Dfilename"><STRONG>-d</STRONG> <EM>map-filename</EM></A></STRONG><BR>
+<DD>
+This option specifies the name of file to write the mapping between
+obfuscated symbol names and non-obfuscated symbol names to.
+Such mapping may be useful for analyzing JavaScript error messages that contain
+obfuscated symbol names - just find the line with the symbol JavaScript interpreter
+complained about, and the second word on that line will be the original
+symbol name. Please keep in mind that it will be much easier for a 
+person having access to such mapfile to study the code, so 
+it's highly suggested to keep such map file in secure place and not
+to distribute it to the customers.
+<P>If the file specified with this option exists, the accumulated mapping
+information will be <STRONG>merged</STRONG> with mapping information previously 
+stored in the file - this allows one to have map file for entire project.</P>
+<P>By default no filename is specified, and thus mapping information 
+is not saved anywhere.</P>
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Dembed%2Dmap"><STRONG>--embed-map</STRONG></A></STRONG><BR>
+<DD>
+This option instructs the mapping between obfuscated symbol names and
+original  symbol names to be appended inside a comment to the result of
+processing, in form of couple of strings per line - obfuscated symbol name
+ and original  symbol name. For symbols that are exceptions (i.e. for ones
+obfuscated symbol name is the same as original) such lines are not emitted
+at all. Lines are emitted only for symbols found in subject file.
+<P>By default this mapping information is not embedded at all.</P>
+<P></P>
+<DT><STRONG><A NAME="item_%2De_encode%2Dcount"><STRONG>-e</STRONG> <EM>encode-count</EM></A></STRONG><BR>
+<DD>
+This option controls the number of encoding iterations to be applied
+to obfuscated file. To disable encoding completely 
+one should specify <EM>0</EM> as number of encoding iterations.
+It's not recommended to apply more than 30 encoding iterations.
+Each encoding iteration increases output file size. The relation between
+non-encoded obfuscated file size and encoded obfuscated file size 
+is approximately the following: <EM>E=I*2+N*450</EM> where <EM>E</EM> is encoded
+size, <EM>I</EM> is non-encoded obfuscated size, and <EM>N</EM> is the number of iterations
+applied. The default value for this option is <EM>10</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_%2DD_list%2Dof%2Dsymbols%2Dfilename"><STRONG>-D</STRONG> <EM>list-of-symbols-filename</EM></A></STRONG><BR>
+<DD>
+Instructs JavaScript Obfuscator to save a list of symbols encountered during
+processing to the <EM>list-of-symbols-filename</EM>. The file will be overwritten.
+This is useful e.g. when generating a list of exceptions from some library, 
+since the resultant file can be used for passing to <STRONG>-x</STRONG> or <STRONG>-X</STRONG>
+switches while processing files that use that library.
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Dnoparsing"><STRONG>--noparsing</STRONG></A></STRONG><BR>
+<DD>
+This is additional mode of operation in which JavaScript Obfuscator only encodes the file. 
+In this mode no parsing of code is performed, no obfuscation of any
+type applied (e.g variables are not renamed, numbers are not turned to 
+expressions, and so on) and comments are not removed, but the original code 
+becomes unreadable. Code encoded in this mode is <STRONG>guaranteed</STRONG> to work the 
+same way it was working before encoding, without a need of <STRONG>any</STRONG> 
+modifications to it.
+<P>If this mode is activated, only the following options are in effect:
+all related to encoding - i.e. <STRONG>-e</STRONG>, and 
+<STRONG>--bannerhead</STRONG>, <STRONG>--bannertail</STRONG>
+.</P>
+<P></P>
+<DT><STRONG><A NAME="item_%2Di_idents%2Dmangling%2Dparams"><STRONG>-i</STRONG> <EM>idents-mangling-params</EM></A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_%2Dn_number%2Dmangling%2Dparams"><STRONG>-n</STRONG> <EM>number-mangling-params</EM></A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_%2Ds_string%2Dmangling%2Dparams"><STRONG>-s</STRONG> <EM>string-mangling-params</EM></A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_%2Dc_charcode%2Dmangling%2Dparams"><STRONG>-c</STRONG> <EM>charcode-mangling-params</EM></A></STRONG><BR>
+<DD>
+Specify options for mangling of tokens of each type.
+The argument is <EM>mangling-specification</EM>, that has the following syntax:
+<P><EM>obfuscator-title</EM>[,<EM>option</EM>=<EM>value</EM>]..</P>
+<P>Tokens of each type can be mangled using different approaches, each approach
+corresponds to <EM>obfuscator</EM>, identified by <EM>obfuscator-title</EM>. Each
+<EM>obfuscator</EM> can have options that alter its behaviour, in order to specify
+them the comma separated
+<EM>option</EM>=<EM>value</EM> pairs may follow <EM>obfuscator-title</EM> after a comma.</P>
+<P>The <EM>mangling-specification</EM> specifies all details on how to mangle tokens
+of each type, so if multiplie occurences of the option are specified, the last
+one is taken into the effect.</P>
+<P>For each type of token a special obfuscator with title <EM>none</EM> is available - 
+it doesn't alter the tokens in any way.</P>
+<P>Here is a list of <EM>obfuscators</EM> for each type of the token, with the options
+they support.</P>
+<DL>
+<DT><STRONG><A NAME="item_%2Di_%3D_obfuscators_for_symbol_names"><STRONG>-i</STRONG> = obfuscators for symbol names</A></STRONG><BR>
+<DD>
+It's obvious that symbols with the same name should be 
+obfuscated  to the same name, independant of location in the program
+these symbol names are locatged. It also should be obvious that entire set of modules 
+and scripts that uses them should be obfuscated using the same value of
+<EM>mangling-specification</EM> - otherwise there will appear undeclared symbols.
+<DL>
+<DT><STRONG><A NAME="item_obfuscator_none">obfuscator <STRONG>none</STRONG></A></STRONG><BR>
+<DD>
+Selecting this obfuscator will keep symbol names unchanged.
+<P></P>
+<DT><STRONG><A NAME="item_obfuscator_combs">obfuscator <STRONG>combs</STRONG></A></STRONG><BR>
+<DD>
+This obfuscator replaces names of symbols with names consisting of all
+possible combinations of characters, specified via option <EM>spec</EM>,
+of the length specified via option <EM>minlen</EM>. E.g. it 
+can replace <EM>formname</EM> with <EM>IlI</EM> and <EM>mystr</EM> with <EM>llI</EM> 
+(which both look very similar to the  human eye) if user specified
+the value of <EM>spec</EM> option as <EM>Il</EM>.
+<P>The replacement symbol depends solely on the index of symbol being seen for the first time
+in the project, and on the value of <EM>seed</EM> argument.</P>
+<P>The detection of collisions for symbols in the current file is done 
+automatically. It's possible to activate detection of collisions for symbols 
+in entire project by the use of <EM>adhere-mapfile</EM> option of this symbol
+obfuscator.</P>
+<P>If option <EM>adhere-mapping</EM> is specified for this obfuscator and has non-zero
+value and if mapfile name is specified via global option <EM>-d</EM>, then 
+JavaScript Obfuscator will read specified mapfile at startup, and will 
+try to lookup the original symbol names in it and use a replacement from that
+file if found; it will also ensure that protected symbols that were produced
+during that invokation of JavaScript Obfuscator are not assigned to any symbol 
+listed in mapfile (and if it encounters some obfuscated symbol it was going 
+to use as a replacement as being used as a replacement for another symbol
+(i.e. so-called ``hash-collision'' occurs) then execution of JavaScript Obfuscator
+is aborted with error message - in which case it's necessary to
+clear mapfile, change the seed and/or increase value of <EM>len</EM> option
+and protect entire application again); after processing completes, mapfile will
+be updated as usual.</P>
+<P>Note, that <EM>shortest</EM> symbol obfuscator also can generate protected symbols 
+using all possible combinations of characters, but it allows to generate
+shortest names possible at the same time (by requiring 2 passes on each 
+source file).</P>
+<P>Options:</P>
+<DL>
+<DT><STRONG><A NAME="item_adhere%2Dmapfile"><STRONG>adhere-mapfile</STRONG></A></STRONG><BR>
+<DD>
+See description of <EM>combs</EM> obfuscator for more information on this option.
+The default value is <EM>0</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_seed"><STRONG>seed</STRONG></A></STRONG><BR>
+<DD>
+The value of this option affects the order in which all possible combinations
+of characters used for symbol name are chosen. The value can be arbitrary string.
+<P></P>
+<DT><STRONG><A NAME="item_minlen"><STRONG>minlen</STRONG></A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_len"><STRONG>len</STRONG></A></STRONG><BR>
+<DD>
+Minimal length of generated symbol. Once all combinations of characters
+of a given length were used for generating symbol names, the length 
+of resultant symbol name is automatically increased. This means it's not
+necessary to make the value of this option very long - set it to big
+enough value that makes your code acceptably unreadable and acceptably big.
+It's impossible to assign value lower than 4 to this option.
+The default value is for this option is <EM>10</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_spec"><STRONG>spec</STRONG></A></STRONG><BR>
+<DD>
+The value of this option instructs which characters can be used for generating
+names of symbols, the value should either be string that is a 
+concatenation of all characters
+possible in the resultant symbol name, e.g. <EM>Il</EM> or <EM>OQ</EM>, or a couple of 
+such strings separated by colon, in which case a string before the colon
+specifies characters that can be used for leading symbol's character, and
+string after the colon specifies characters that can be used for all characters
+of the symbol except the first (the leading) - e.g. <EM>lI:lI1</EM> or <EM>O:O0</EM>.
+The recommended values are <EM>lI</EM>, <EM>O:O0</EM> and <EM>lI:lI1</EM>.
+If this option is not specified, it's assumed that all characters
+allowed for JavaScript language to be used for symbols can form a 
+resultant symbol name.
+<P></P></DL>
+<DT><STRONG><A NAME="item_obfuscator_mixcase">obfuscator <STRONG>mixcase</STRONG></A></STRONG><BR>
+<DD>
+This obfuscator replaces all symbols with one of names you specify, but randomly
+altering case of letters in the names. E.g. if you specify <EM>spec</EM> option as
+<EM>strictly_confidential</EM> it will replace names of symbols with
+<EM>sTrictly_CONfidENTiAl</EM>, <EM>StRiCtly_cOnFiDeNTiaL</EM>, <EM>stRIctLY_coNFiDeNTiaL</EM>
+and other possible variantions. You can specify several replacement names
+via <EM>spec</EM> option, separating them with <EM>:</EM> (colon).
+The replacement symbol depends solely on the index of symbol being seen for the first time
+in the project, and on the value of <EM>seed</EM> argument.
+<P>The detection of collisions for symbols in the current file is done 
+automatically. It's possible to activate detection of collisions for symbols 
+in entire project by the use of <EM>adhere-mapfile</EM> option of this symbol
+obfuscator.</P>
+<P>If option <EM>adhere-mapping</EM> is specified for this obfuscator and has non-zero
+value and if mapfile name is specified via global option <EM>-d</EM>, then 
+JavaScript Obfuscator will read specified mapfile at startup, and will 
+try to lookup the original symbol names in it and use a replacement from that
+file if found; it will also ensure that protected symbols that were produced
+during that invokation of JavaScript Obfuscator are not assigned to any symbol 
+listed in mapfile (and if it encounters some obfuscated symbol it was going 
+to use as a replacement as being used as a replacement for another symbol
+(i.e. so-called ``hash-collision'' occurs) then execution of JavaScript Obfuscator
+is aborted with error message - in which case it's necessary to
+clear mapfile,  and change the seed and/or use longer names in <EM>spec</EM> argument,
+and then clean and rebuild entire project again.</P>
+<P>After processing completes, mapfile will be updated as usual.</P>
+<P>Options:</P>
+<DL>
+<DT><STRONG><STRONG>adhere-mapfile</STRONG></STRONG><BR>
+<DD>
+See description of <EM>combs</EM> obfuscator for more information on this option.
+The default value is <EM>0</EM>.
+<P></P>
+<DT><STRONG><STRONG>seed</STRONG></STRONG><BR>
+<DD>
+The value of this option affects the order in which all possible combinations
+of characters used for symbol name are chosen. The value can be arbitrary string.
+<P></P>
+<DT><STRONG><STRONG>spec</STRONG></STRONG><BR>
+<DD>
+The value of this option specifies replacement names, separated with a colon (<EM>:</EM>).
+If number of all possible variants all specified names allow to produce is lower than
+certain amount (<EM>512</EM>), hardcoded fallback value <EM>strictly_confidential</EM> is used.
+<P>If number of symbols that need to be replaced in the project is less than 
+number of all possible variants all specified names allow to generate, then
+obfuscation is aborted with error message.</P>
+<P>It's allowed to use non-letters in the value of this option (e.g. digits and underscore).</P>
+<P></P></DL>
+<DT><STRONG><A NAME="item_obfuscator_md5">obfuscator <STRONG>md5</STRONG></A></STRONG><BR>
+<DD>
+This obfuscator calculates md5 sum of the string produced by concatentation
+of a constant prefix (that can be passed via <STRONG>seed</STRONG> option) and the symbol 
+name to be obfuscated. After that from the hexadecimial representation of the
+md5sum several (exact length is specified using <STRONG>len</STRONG> option)
+leading characters are appended to another prefix
+(that can be set via <STRONG>prefix</STRONG> option) to form obfuscated symbol name.
+<P>It's obvious that in theory it's possible to get md5sum collision - the 
+critical situation when two different symbols will be obfuscated to the same 
+symbol name. When such situation is detected, the obfuscation is aborted.
+The detection of collisions for symbols in the current file is done 
+automatically. If detection of collisions for symbols in entire project
+is required, one can use <EM>adhere-mapfile</EM> option for enforcing uniqueness
+of protected symbols across all files - please read the description of
+symbol name obfuscator <EM>combs</EM>.
+The only solution in case md5sum collision is detected is to change the value 
+of the <STRONG>seed</STRONG> option or to increase
+the value of the <STRONG>len</STRONG> option. However, such situations are very rare.</P>
+<P>This is the default obfuscator for symbol names.</P>
+<P>Options:</P>
+<DL>
+<DT><STRONG><STRONG>adhere-mapfile</STRONG></STRONG><BR>
+<DD>
+See description of <EM>combs</EM> obfuscator for more information on this option.
+The default value is <EM>0</EM>.
+<P></P>
+<DT><STRONG><STRONG>seed</STRONG></STRONG><BR>
+<DD>
+See above for a description of this option. The value can be arbitrary string.
+The default value is generated as random string at the JavaScript Obfuscator suite 
+installation time, so it will be unique for each user of JavaScript Obfuscator.
+<P></P>
+<DT><STRONG><STRONG>len</STRONG></STRONG><BR>
+<DD>
+Specifies how many characters of the hexadecimial representation of the md5 
+sum to use for obfuscated name of the symbol. The less the value, the shorter
+all identifiers will be, the smaller obfuscated code will become, and the
+easier it will be for human to study the code. Also increasing the value
+lowers the probability of md5sum collision. The default value is <EM>10</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_prefix"><STRONG>prefix</STRONG></A></STRONG><BR>
+<DD>
+Specifies the prefix of all mangled symbol names. It should non-empty string
+(one character is enough) just because hex representation of md5sum can begin
+with a digit. There is no point in changing the prefix. The default value is
+<EM>z</EM>.
+<P></P></DL>
+<DT><STRONG><A NAME="item_obfuscator_prefix">obfuscator <STRONG>prefix</STRONG></A></STRONG><BR>
+<DD>
+This obfuscator just prepends the same string (specified via <STRONG>str</STRONG> option)
+to all symbol names to get the obfuscated symbol name. This obfuscator is
+designed to be used for initial testing of obfuscated code for locations of
+use of undeclared symbols in obfuscated code. It's obvious that 
+while testing obfuscated code it's much more easier  to find out what symbol 
+is undeclared if it's trivial to correlate that symbol of the obfuscated
+program with the symbol of the non-obfuscated program.
+<P>Options:</P>
+<DL>
+<DT><STRONG><A NAME="item_str"><STRONG>str</STRONG></A></STRONG><BR>
+<DD>
+The string to prepend to all symbol names. Default value is <EM>Z439Z_</EM>.
+<P></P></DL>
+<DT><STRONG><A NAME="item_obfuscator_shortest">obfuscator <STRONG>shortest</STRONG></A></STRONG><BR>
+<DD>
+This obfuscator replaces each symbol name with the shortest identifier
+possible, using the shorter identifiers for symbols that are used more
+frequently. Using this obfuscator and <EM>none</EM> obfuscators for strings and
+numbers will produce the most compact version of the code possible. 
+The presence of this obfuscator turns JavaScript Obfuscator into so-called source code <EM>``compressor''</EM>.
+<P>It's perfectly suitable for multimodule projects too.
+There are two modes of operation this obfuscator works in 
+(controlled by its parameter <STRONG>countupdate</STRONG>) - scanning through the project 
+files for computing the use counts for all symbols (used if 
+parameter <STRONG>countupdate</STRONG> is passed value <EM>1</EM>) and saving the
+counts to a special file hereafter called <EM>countsfile</EM> 
+(whose name is specified as value of 
+parameter <STRONG>countsfile</STRONG>) or performing the obfuscation
+itself using the symbol use counts from <EM>countsfile</EM> gathered during 
+first mode of operation
+(used if parameter <STRONG>countupdate</STRONG> is passed value <EM>0</EM>, or if
+this parameter is not specified at all). In the obfuscation mode
+obfuscator maintains its state (a mapping between original symbols and
+obfuscated ones) in the file whose name specified as a value of
+parameter <STRONG>statefile</STRONG> (hereafter such file will be called <EM>statefile</EM>).</P>
+<P>Note that file with symbol counts should be up to date
+- at least it should mention all symbols that are subject to obfuscation - 
+so if you added some code and introduced some new symbols, you'll have to 
+regenerate <EM>countsfile</EM>. JavaScript Obfuscator aborts execution if it 
+encounters that some symbol was not counted at all, with diagnostics indicating
+that <EM>countsfile</EM> needs to be rebuilt. Rebuilding <EM>countsfile</EM> means
+deleting (or truncating) the <EM>countsfile</EM> and <EM>statefile</EM> and running 
+JavaScript Obfuscator in symbol count gathering mode on all files of the project.
+If your change to the code didn't introduce new symbols but just
+increased or decreased the use of already existing ones, it won't abort
+the execution but there will be a chance that size of resultant obfuscated
+file won't be the smallest possible.</P>
+<P>So the common approach to using this obfuscator for symbol names is:
+develop and debug the code, delete files <EM>a-file-with-counts</EM> and
+<EM>a-file-with-state</EM>, then run the JavaScript Obfuscator with options
+like this  <CODE>-i shortest,countupdate=1,countsfile=a-file-with-counts</CODE> for all
+source files in the project to gather symbol counts to the file
+<EM>a-file-with-counts</EM>, and then run JavaScript Obfuscator with options
+like this  
+<CODE>-i shortest,countupdate=0,countsfile=a-file-with-counts,statefile=a-file-with-state</CODE>
+for all source files in the project.</P>
+<P>Another option is to process all files in your project in one invokation of  JavaScript Obfuscator,
+and use <EM>twopasses=1</EM> option of this mangler. In that case, you won't need to 
+pass <EM>..,countsfile=a-file-with-counts,statefile=a-file-with-state</EM> options to the mangler - 
+it will maintain counts file and state file in temporary files.</P>
+<P>By default each symbol name is obfuscated to the unique, but random identifier
+of the length corresponding to the number of occurencies of the
+given symbol. That randomness of identifier can be disabled by passing
+value <EM>0</EM> for parameter <STRONG>dontshuffle</STRONG> - this will force e.g. first symbol in 
+the first source file of the project to always be obfuscated to the name
+<EM>a</EM>
+(provided there is no exception with the same name).</P>
+<P>It's possible to specify a set of characters that can be used for resultant
+symbol names by the use of <EM>spec</EM> option - e.g. one can make code very hard
+to analyze without modification by asking to use only symbols <EM>I</EM> and <EM>l</EM>
+for names of symbols - that will produce symbols like <EM>IllII</EM> or <EM>IIlIIl</EM>
+which look very similar in the most fonts (but of course this won't result
+in smallest output). 
+The use of this option makes <EM>shortest</EM> obfuscator a reliable version
+of <EM>combs</EM> obfuscator for multi-module projects, since it eliminates
+a chance for a case when two different symbols in two different modules
+(in which only one of the symbols is used) getting replaced with the same
+resultant symbol (which is possible in theory, but has a very small 
+possibility).</P>
+<P>Options:</P>
+<DL>
+<DT><STRONG><A NAME="item_countsfile"><STRONG>countsfile</STRONG></A></STRONG><BR>
+<DD>
+Location of the <EM>countsfile</EM> - the file containing use counts for all symbols.
+<P></P>
+<DT><STRONG><A NAME="item_countupdate"><STRONG>countupdate</STRONG></A></STRONG><BR>
+<DD>
+Selects the mode of obfuscator - gathering symbol use counts 
+(if value is <EM>1</EM>) or obfuscating (value is <EM>0</EM>). Default value is <EM>0</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_statefile"><STRONG>statefile</STRONG></A></STRONG><BR>
+<DD>
+Specifies the name of the file with the state information used internally
+by obfuscator when it's in obfuscation mode.
+<P></P>
+<DT><STRONG><A NAME="item_dontshuffle"><STRONG>dontshuffle</STRONG></A></STRONG><BR>
+<DD>
+Instructs not to select random name of the given length as obfuscated symbol
+name, but to select the next one by alphabet not being an exception.
+<P></P>
+<DT><STRONG><STRONG>minlen</STRONG></STRONG><BR>
+<DD>
+Instructs the minimal length of resultant symbol name. Default value is <EM>1</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_twopasses"><STRONG>twopasses</STRONG></A></STRONG><BR>
+<DD>
+Passing <EM>1</EM> to this option will force  JavaScript Obfuscator to make two temporary files
+and internally pass them to <EM>statefile</EM> and <EM>countsfile</EM> options; first making 
+a pass with <EM>countsupdate</EM> set to <EM>1</EM>, and then making a pass with h <EM>countsupdate</EM> set to <EM>0</EM>.
+So it obviates the need to call  JavaScript Obfuscator manually two times. 
+It will protect your entire project in one invokation of  JavaScript Obfuscator.
+This option can't be used if you need to update and then reprotect only one file in your project, without 
+re-protecting all other files.
+<P></P>
+<DT><STRONG><STRONG>spec</STRONG></STRONG><BR>
+<DD>
+The value of this option instructs which characters can be used for generating
+names of symbols, the value should either be string that is a 
+concatenation of all characters
+possible in the resultant symbol name, e.g. <EM>Il</EM> 
+(that will produce symbols like <EM>IllII</EM> or <EM>IIlIIl</EM>)
+or <EM>OQ</EM> (that will produce symbols like <EM>OQOOQQ</EM> or <EM>QOOQQO</EM>), 
+or a couple of 
+such strings separated by colon, in which case a string before the colon
+specifies characters that can be used for leading symbol's character, and
+string after the colon specifies characters that can be used for all characters
+of the symbol except the first (the leading) - e.g. <EM>lI:lI1</EM> 
+(that will produce symbols like <EM>I1lII1</EM> or <EM>lI1IIl1</EM>)
+or <EM>O:O0</EM>.
+The recommended values are <EM>lI</EM>, <EM>O:O0</EM> and <EM>lI:lI1</EM>.
+The use of this option makes <EM>shortest</EM> obfuscator a reliable version
+of <EM>combs</EM> obfuscator for multi-module projects.
+If this option is not specified, it's assumed that all characters
+allowed for JavaScript language can form a resultant symbol name.
+<P></P></DL>
+</DL>
+<DT><STRONG><A NAME="item_%2Dn_%3D_obfuscators_for_numeric_constants"><STRONG>-n</STRONG> = obfuscators for numeric constants</A></STRONG><BR>
+<DD>
+There is only one non-trivial obfuscator for numeric constants currently - 
+<STRONG>sum3</STRONG>. It's the default.
+<DL>
+<DT><STRONG>obfuscator <STRONG>none</STRONG></STRONG><BR>
+<DD>
+Selecting this obfuscator will keep numbers unchanged.
+<P></P>
+<DT><STRONG><A NAME="item_obfuscator_sum3">obfuscator <STRONG>sum3</STRONG></A></STRONG><BR>
+<DD>
+This obfuscator replaces the constant value with an arithmetic expression
+consisting of addition and substraction operations on either 3 constant numeric 
+values (in case no asserters were enabled) or 2 constant numeric values 
+and 1 constant variable (in case some asserters were enabled - please
+note that asserters are not supported in Trial version of the Product),
+which are represented as decimial and hexadecimial values (their
+radixes can be changed by altering <STRONG>format</STRONG> option). For different occurencies
+of the same constant numeric values, the choice is provided between
+using the same values used in expressions, or using 2 random values and one 
+computed - this is controlled using <STRONG>const</STRONG> option. If you wish to make
+analysis of the differencies between revisions of your software more difficult, 
+you should request the use of 2 random values and one  computed in the 
+expression - this way after each obfuscation each obfuscated file will differ
+from the previous run of obfuscator. This is the default obfuscator
+(in fact it's the only non-trvial one for numeric constants).
+<P>Options:</P>
+<DL>
+<DT><STRONG><A NAME="item_const"><STRONG>const</STRONG></A></STRONG><BR>
+<DD>
+Specifies whether for the same numeric constant the obfuscation 
+should produce different substitution expression (the value for the option
+is <EM>0</EM>) or same expressuib (the value for the option is <EM>1</EM>). 
+Default value is <EM>0</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_format"><STRONG>format</STRONG></A></STRONG><BR>
+<DD>
+Specifies the sprintf format string for the obfuscated substitutor.
+The default value is 
+<EM>(0x%04x+% 4d-0x%04x)</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_format_var"><STRONG>format_var</STRONG></A></STRONG><BR>
+<DD>
+Specifies the sprintf format string for the obfuscated substitutor in case
+a variable and 2 constants are used.
+The default value is 
+<EM>(0x%04x+% 4d-%s)</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_var_use_ratio"><STRONG>var_use_ratio</STRONG></A></STRONG><BR>
+<DD>
+In case some asserters were enabled, specifies the ratio of occurencies
+of expressions that involve variables compared to all numeric constants
+occured in the source code. E.g. if you wish that half of the numeric
+constants in your code referenced variables, you should set the value
+of this parameter to 0.5. It's not recommended to set this parameter
+to <EM>0</EM> for obvious reasons. The expressions in the code use references 
+to variables, the bigger code is (expression with reference to variable is 
+larger than expression without them by about 7-9 bytes).
+The default value is <EM>0.25</EM>.
+<P></P></DL>
+</DL>
+<DT><STRONG><A NAME="item_%2Ds_%3D_obfuscators_for_string_constants"><STRONG>-s</STRONG> = obfuscators for string constants</A></STRONG><BR>
+<DD>
+These make constant strings more difficult to read. 
+The default string obfuscator is <STRONG>hexchar</STRONG>.
+The default string obfuscator is <STRONG>none</STRONG> - that is, strings are not mangled
+at all.
+<DL>
+<DT><STRONG>obfuscator <STRONG>none</STRONG></STRONG><BR>
+<DD>
+Selecting this obfuscator will keep strings unchanged.
+<P></P>
+<DT><STRONG><A NAME="item_obfuscator_hexchar">obfuscator <STRONG>hexchar</STRONG></A></STRONG><BR>
+<DD>
+This obfuscator substitutes each character of the string with reverse slash
+and it's code, by default in hexadecimial notation - e.g. string <EM>``abc''</EM> is substituted
+with <EM>``\x61\x62\x63''</EM>.
+<DL>
+<DT><STRONG><STRONG>format</STRONG></STRONG><BR>
+<DD>
+Specifies the sprintf format string for each character's substitutor.
+The default value is <EM>'\\x%x'</EM>.
+<P></P></DL>
+</DL>
+<DT><STRONG><A NAME="item_obfuscator_list4chr">obfuscator <STRONG>list4chr</STRONG></A></STRONG><BR>
+<DD>
+This obfuscator substitutes a string with the 
+<EM>join(``'',list_of_expressions_evaluating_to_characters</EM>). The 
+<EM>list_of_expressions_evaluating_to_characters</EM> is inline list of 
+expressions that evaluate to individual characters. 
+Each item in the list corresponds to the character of the
+string being obfuscated. Each character is created by composing a character
+with code computed as numeric expression that is produced using obfuscator 
+for numeric constants; the parameters for this obfuscator are passed using <STRONG>-c</STRONG> option
+and have the same meaning as parameters to the obfuscator for numeric 
+constants passed using <STRONG>-n</STRONG> option. The default value of parameter for the <STRONG>-c</STRONG>
+option is the same as for <STRONG>-n</STRONG>. The <STRONG>list4chr</STRONG> obfuscator is designed
+in order to make automatic deobfuscation of string constants 
+someone may like to implement more complicated.
+<P></P></DL>
+<DT><STRONG><A NAME="item_%2Dc_%3D_obfuscator_for_character_codes"><STRONG>-c</STRONG> = obfuscator for character codes</A></STRONG><BR>
+<DD>
+Please read the description of the <STRONG>list4chr</STRONG> obfuscator for string
+codes (a previous paragraph). <STRONG>none</STRONG> obfuscator will not obfuscate character
+codes at all (but the string will still be unreadable).
+<P></P></DL>
+<DL>
+<DT><STRONG><A NAME="item_%2DS_server%2Dmode%2Dparams"><STRONG>-S</STRONG> <EM>server-mode-params</EM></A></STRONG><BR>
+<DD>
+Specify options for server mode backends.
+The argument is <EM>server-specification</EM>, that has the following syntax:
+<P><EM>server-backend-title</EM>[,<EM>option</EM>=<EM>value</EM>]..</P>
+<P>There are several types of backends. The backend is selected
+by <EM>server-backend-title</EM>. Each
+<EM>backend</EM> can have options that alter its behaviour, in order to specify
+them the comma separated
+<EM>option</EM>=<EM>value</EM> pairs may follow <EM>server-backend-title</EM> after a comma.</P>
+<P>There is a special backend with title <EM>none</EM> available -
+it doesn't perform any action other than processing selected input file
+(i.e. it doesn't have any server behaviour).</P>
+<P>When non-default backend is used, JavaScript Obfuscator waits for input coming from
+a backend-specific source, processes input according to commandline
+options given to it when JavaScript Obfuscator was started (this means that
+the same set of exceptions and other processing options
+will be used for all supplied inputs), and
+returns the result of processing in the backend-specific way to the client
+(or stores them somewhere).</P>
+<P>Here is a list of <EM>server-backend-title</EM>s, with the options they support.</P>
+<DL>
+<DT><STRONG><A NAME="item_none"><STRONG>none</STRONG></A></STRONG><BR>
+<DD>
+When it's selected, JavaScript Obfuscator will read input file from stdin or from
+file whose name is passed as a commandline argument, and will produce output
+on stdout or to the file specified with <STRONG>-o</STRONG> option. This server mode
+has no options. This is default server mode.
+<P></P>
+<DT><STRONG><A NAME="item_multifile"><STRONG>multifile</STRONG></A></STRONG><BR>
+<DD>
+This server mode allows to process several files with the same set of
+commandline options at once. The names of files are passed as commandline
+arguments of JavaScript Obfuscator or via <STRONG>filelist</STRONG> parameter; 
+they may be located in different directories.
+The name of the output directory is specified with <EM>outdir</EM> option of
+this server mode; if filenames to process are absolute pathnames it's necessary
+to specify input directory relative to which output filenames will be 
+computed by the use of option <EM>indir</EM>. 
+If filenames to process are relative names, it's assumed that current directory
+is input directory relative to which output filenames will be computed.
+All necessary output subdirectories will automatically be created.
+<P>Example:</P>
+<P>The following commandline fragments:</P>
+<PRE>
+    -S multifile,outdir=/home/user/prj1/out,indir=/home/user/prj1/in \
+        /home/user/prj1/in/file1.js /home/user/prj1/in/file2.js \
+        /home/user/prj1/in/subdir1/file3.js</PRE>
+<P>and</P>
+<PRE>
+    -S multifile,outdir=/home/user/prj1/out \
+        file1.js file2.js subdir1/file3.js</PRE>
+<P>are equivalent if current directory is <EM>/home/user/prj1/in</EM>. So at first
+ JavaScript Obfuscator will create <EM>/home/user/prj1/out/subdir1</EM> (if absent),
+and will put protected version of <EM>file1.js</EM> to 
+<EM>/home/user/prj1/out/file1.js</EM>, <EM>file2.js</EM> to 
+<EM>/home/user/prj1/out/file2.js</EM> and <EM>subdir1/file3.js</EM> to 
+<EM>/home/user/prj1/out/subdir1/file3.js</EM>.</P>
+<P>Options supported:</P>
+<DL>
+<DT><STRONG><A NAME="item_outdir"><EM>outdir</EM></A></STRONG><BR>
+<DD>
+This option is required; it specifies the output directory.
+<P></P>
+<DT><STRONG><A NAME="item_indir"><EM>indir</EM></A></STRONG><BR>
+<DD>
+This option specifies base input directory  used to compute
+input file names (see example above); specifying this option is not
+necessary if all input filenames specified are relative.
+<P></P>
+<DT><STRONG><A NAME="item_filelist"><EM>filelist</EM></A></STRONG><BR>
+<DD>
+This option specifies name of file that contains filenames to
+process, one per line. Filenames should be relative to the 
+directory specified by <STRONG>indir</STRONG> parameter. This is not mandatory option - 
+if it's not specified, names of files to process are taken from the 
+command line.
+<P></P></DL>
+<DT><STRONG><A NAME="item_backend_unix%2Dsocket">backend <STRONG>unix-socket</STRONG></A></STRONG><BR>
+<DD>
+When this backend is selected, JavaScript Obfuscator starts accepting connections
+on the AF_UNIX domain socket with name specified with option <STRONG>socketname</STRONG>
+using a special protocol. The clients connect to it using that socket, 
+tell the input length using string produced by printf format ``% 9d\n'', and
+then write the input to be processed, JavaScript Obfuscator processes it using the options 
+specified on the commandline when it was invoked, and returns the result of 
+processing to the client.
+<P>This server mode is supported only on unix-like platforms (e.g. Unix, Linux, FreeBSD, MacOS X).
+It's not supported on Windows.</P>
+<P>Options:</P>
+<DL>
+<DT><STRONG><A NAME="item_socketname"><STRONG>socketname</STRONG></A></STRONG><BR>
+<DD>
+Specifies the filename of the socket to listed for client requests on.
+The default value is <EM>/tmp/obfus-server-socket</EM>.
+<P></P></DL>
+<DT><STRONG><A NAME="item_backend_tcp%2Dsocket">backend <STRONG>tcp-socket</STRONG></A></STRONG><BR>
+<DD>
+When this backend is selected, JavaScript Obfuscator starts accepting connections
+on the TCP socket at port and ip address specified with options <STRONG>port</STRONG>
+and <STRONG>ip</STRONG> respectively using a special protocol. The clients connect to it using, 
+tell the input length using string produced by printf format ``% 9d\n'', and
+then write the input to be processed, JavaScript Obfuscator processes it using the options 
+specified on the commandline when it was invoked, and returns the result of 
+processing to the client.
+<P>Options:</P>
+<DL>
+<DT><STRONG><A NAME="item_port"><STRONG>port</STRONG></A></STRONG><BR>
+<DD>
+Specifies the port to listen for incoming connections.
+The default value is <EM>7654</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_ip"><STRONG>ip</STRONG></A></STRONG><BR>
+<DD>
+Specifies the IP address to listen for incoming connections.
+Use '0.0.0.0' to listen on all IP addresses.
+The default value is <EM>127.0.0.1</EM> (i.e. listening only on loopback interface
+is default behaviour).
+<P></P></DL>
+</DL>
+<DT><STRONG><A NAME="item_%2DT_time%2Dasserter%2Dparams"><STRONG>-T</STRONG> <EM>time-asserter-params</EM></A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_%2DH_hostname%2Dasserter%2Dparams"><STRONG>-H</STRONG> <EM>hostname-asserter-params</EM></A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_%2DG_generic%2Dasserter%2Dparams"><STRONG>-G</STRONG> <EM>generic-asserter-params</EM></A></STRONG><BR>
+<DD>
+Specify options for asserters of each type (not available in Trial version
+of the product).
+The argument is <EM>asserter-specification</EM>, that has the following syntax:
+<P><EM>asserter-title</EM>[,<EM>option</EM>=<EM>value</EM>]..</P>
+<P>There are several subtypes of asserters for each type. The subtype is selected
+by <EM>asserter-title</EM>. Each
+<EM>asserter</EM> can have options that alter its behaviour, in order to specify
+them the comma separated
+<EM>option</EM>=<EM>value</EM> pairs may follow <EM>asserter-title</EM> after a comma.</P>
+<P>For each type of asserters a special asserter with title <EM>none</EM> is available - 
+it doesn't perform any action.</P>
+<P>Here is a list of <EM>asserter-title</EM>s for each type of the asserters, with the 
+options they support.</P>
+<DL>
+<DT><STRONG><A NAME="item_%2DT_%3D_time_asserters"><STRONG>-T</STRONG> = time asserters</A></STRONG><BR>
+<DD>
+Time asserters insure that some condition about the point of time the script
+was started at is true.
+<DL>
+<DT><STRONG><A NAME="item_asserter_expire">asserter <STRONG>expire</STRONG></A></STRONG><BR>
+<DD>
+This asserter insures that current date and time is less than one specified
+via <STRONG>whenexpires</STRONG> option. There way used to acquire current date and time
+is specified via <STRONG>source</STRONG> option. If condition is violated, the code finishes
+execution after performing all other actions requested. 
+The warning, specified
+via option <STRONG>onviolated-message</STRONG> will be printed if value of option
+<STRONG>onviolated-warn</STRONG> is <EM>1</EM>.
+<P>Options:</P>
+<DL>
+<DT><STRONG><A NAME="item_whenexpires"><STRONG>whenexpires</STRONG></A></STRONG><BR>
+<DD>
+Specifies the date and time after which program should stop working.
+The format of this parameter can be either number of seconds since 1 Jan 1970,
+or human representation of the absolute date and time like <EM>20 Apr 2004 15:43</EM> 
+or <EM>2004/4/20 15:43</EM>, or relative date and time of the form 
+``now + count units time-spec'' like ``now + 2 weeks 9:00'' 
+(i.e. any format Perl module Time::ParseDate recognizes).
+If the value is a string <EM>0</EM>, then the asserter is disabled. Default value
+is <EM>0</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_onviolated%2Dwarn"><STRONG>onviolated-warn</STRONG></A></STRONG><BR>
+<DD>
+If <EM>1</EM>, directs message specified via <STRONG>onviolated-message</STRONG> to be printed.
+Default value is <EM>0</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_onviolated%2Dmessage"><STRONG>onviolated-message</STRONG></A></STRONG><BR>
+<DD>
+Specifies the message to be printed in case value of <STRONG>onviolated-warn</STRONG> is 
+<EM>1</EM>. The trailing newline will be automatically appended. 
+Escape sequences are allowed.
+Please be sure to quote the message properly in order the shell passed the
+message as a single string. 
+Default value is <EM>``The script has expired, please contact webmaster.''</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_source"><STRONG>source</STRONG></A></STRONG><BR>
+<DD>
+Specifies the source of information about current time. 
+The possible options are:
+<DL>
+<DT><STRONG><A NAME="item_date%2Egettime"><STRONG>date.gettime</STRONG></A></STRONG><BR>
+<DD>
+The <EM>getTime()</EM> method of the default-constructed <EM>Date</EM> object is used.
+This is the default method.
+<P></P>
+<DT><STRONG><A NAME="item_document%2ElastModified"><STRONG>document.lastModified</STRONG></A></STRONG><BR>
+<DD>
+The <EM>Last-Modified</EM> HTTP header for the document script is running in is used 
+as a source of information about current time. This means that web server
+should emit current time and date when generating the documents into which
+protected scripts are integrated. On some ancient browsers 
+this method of getting current time is unavailable if browser is running under
+non-english environment. In case this method of getting current time is not
+available, the fallback - using the default source - is used.
+<P></P></DL>
+</DL>
+<DT><STRONG><A NAME="item_asserter_expire%2DASP">asserter <STRONG>expire-ASP</STRONG></A></STRONG><BR>
+<DD>
+Same as the <EM>expire</EM> asserter, but targeted for JavaScript scripts inside
+ASP files. In case of violation of licensing conditions the warning about 
+program expiration is output to the client,
+and the page processing is aborted after that.
+<P></P>
+<DT><STRONG><A NAME="item_asserter_expire%2ENET%2Dconsole">asserter <STRONG>expire.NET-console</STRONG></A></STRONG><BR>
+<DD>
+Same as the <EM>expire</EM> asserter, but targeted for JavaScript programs for
+the .NET platform. 
+The warning about program expiration is printed using <EM>print()</EM> function,
+and program is terminated after that.
+<P></P>
+<DT><STRONG><A NAME="item_asserter_expire%2ENET%2Dgui">asserter <STRONG>expire.NET-gui</STRONG></A></STRONG><BR>
+<DD>
+Same as the <EM>expire</EM> asserter, but targeted for JavaScript programs for
+the .NET platform. 
+The warning about program expiration is shown in MessageBox, and
+the program is terminated after that.
+<P></P></DL>
+<DT><STRONG><A NAME="item_%2DH_%3D_hostname_asserters"><STRONG>-H</STRONG> = hostname asserters</A></STRONG><BR>
+<DD>
+Hostname asserters insure that some condition about the name of the
+host from which the document the script is inside was got by web browser
+satisfies certain conditions. 
+In case the conditions
+are not met, the script is terminated. If parameter
+<STRONG>onviolated-warn</STRONG> is <EM>1</EM>, the message specified by parameter 
+<STRONG>onviolated-message</STRONG> is displayed.
+<P>All of these asserters support the same set of parameters:</P>
+<DL>
+<DT><STRONG><A NAME="item_matches"><STRONG>matches</STRONG></A></STRONG><BR>
+<DD>
+The string interpreted differently by each asserter, it's a host name
+for <STRONG>single-host</STRONG> asserter, a plus-separated list of allowed host suffixes 
+for <STRONG>hosttails</STRONG> asserter or a regular expression to which hostname 
+should match for <STRONG>hostregex</STRONG> asserter. In all cases hostnames should be 
+assumed in lowercase. See more details about treatment
+of hostname below. Default value is <EM>localhost</EM>.
+<P></P>
+<DT><STRONG><STRONG>onviolated-warn</STRONG></STRONG><BR>
+<DD>
+If <EM>1</EM>, the message specified with parameter <STRONG>onviolated-message</STRONG> is
+printed before program is terminated in case condition about hostname is
+not met. Default value is <EM>0</EM>.
+<P></P>
+<DT><STRONG><STRONG>onviolated-message</STRONG></STRONG><BR>
+<DD>
+Specifies the message to be printed in case condition about hostname is
+not met.
+The trailing newline will be automatically appended. 
+Escape sequences are allowed.
+Please be sure to quote the message properly in order the shell passed the
+message as a single string. 
+Default value is <EM>``The script is not licensed to be run from this server.''</EM>
+<P></P>
+<DT><STRONG><STRONG>source</STRONG></STRONG><BR>
+<DD>
+<a name=_hostname_source></a>
+The source of information about server's hostname.<P>The following sources of information are supported:</P>
+<DL>
+<DT><STRONG><A NAME="item_document%2Edomain"><STRONG>document.domain</STRONG></A></STRONG><BR>
+<DD>
+The value of <EM>document.domain</EM> is used as a hostname. This is the default
+method.
+<P></P>
+<DT><STRONG><A NAME="item_window%2Elocation%2Ehost"><STRONG>window.location.host</STRONG></A></STRONG><BR>
+<DD>
+The value of <EM>window.location.host</EM> is used as a hostname of a host
+the document came from.
+<P></P>
+<DT><STRONG><A NAME="item_env_http_host"><STRONG>env_http_host</STRONG></A></STRONG><BR>
+<DD>
+The value returned by <EM>Request.ServerVariables(``HTTP_HOST'')</EM> is used as
+host name. It's the default for all host asserters with names ending
+in <EM>ASP</EM>. It's applicable only for asserters with names ending
+in <EM>ASP</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_env_server_name"><STRONG>env_server_name</STRONG></A></STRONG><BR>
+<DD>
+The value returned by <EM>Request.ServerVariables(``SERVER_NAME'')</EM> is used as
+host name. It's applicable only for asserters with names ending
+in <EM>ASP</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_%2ENET%2DmachineName"><STRONG>.NET-machineName</STRONG></A></STRONG><BR>
+<DD>
+The value of <EM>Environment.MachineName</EM> is used as a hostname. Can be used 
+only for JavaScript for .NET programs. It's the default for all host
+asserters with names containing <EM>.NET</EM>.
+<P></P></DL>
+<P>Default value is <STRONG>document.domain</STRONG>.</P>
+</DL>
+<P>All hostname asserters differ only in treatment of the parameter <STRONG>matches</STRONG>.
+The following hostname asserters are supported:</P>
+<DL>
+<DT><STRONG><A NAME="item_single%2Dhost"><STRONG>single-host</STRONG></A></STRONG><BR>
+<DD>
+The parameter <STRONG>matches</STRONG> is a single name of host with domain part, e.g.
+<EM>uk3.valuehost.com</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_hosttails"><STRONG>hosttails</STRONG></A></STRONG><BR>
+<DD>
+The parameter <STRONG>matches</STRONG> is a <STRONG>+</STRONG>-separated list of hostname tails
+of host to match, e.g. <EM>valuehost.com+valuehost.co.uk</EM>.  Hosts with names
+<EM>uk3.valuehost.com</EM> and <EM>support.valuehost.co.uk</EM> and even
+<EM>ad.bestvaluehost.com</EM> will be considered as matching by this asserter.
+<P></P>
+<DT><STRONG><A NAME="item_hostregex"><STRONG>hostregex</STRONG></A></STRONG><BR>
+<DD>
+The parameter <STRONG>matches</STRONG> is a regular expression that host name should
+match. Don't forget to insert acnhors <EM>^</EM> and <EM>$</EM> around it - they won't
+be automatically appended and prepended. Don't forget to quote shell
+special characters like <EM>*</EM> and <EM>$</EM> (or just enclose entire parameter
+inside single quotes if on unix). E.g. the value <EM>[.]valuehost[.]</EM> of
+parameter <STRONG>matches</STRONG> will make hosts with names 
+<EM>www.valuehost.com</EM> and <EM>support.valuehost.co.uk</EM> as matching by this 
+asserter, and host with name <EM>www.bestvaluehost.com</EM> and
+<EM>www.valuehosters.com</EM>  won't be considered matching.
+<P></P>
+<DT><STRONG><A NAME="item_single%2Dhost%2DASP"><STRONG>single-host-ASP</STRONG></A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_hosttails%2DASP"><STRONG>hosttails-ASP</STRONG></A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_hostregex%2DASP"><STRONG>hostregex-ASP</STRONG></A></STRONG><BR>
+<DD>
+Same as the asserters with titles without <EM>-ASP</EM> suffix, 
+with same options and semantics, but targeted for JavaScript code inside
+ASP files.
+The warning about program expiration is printed to client 
+and request processing is stopped in case licensing conditions were violated.
+<P>Only timesources <EM>env_http_host</EM> and <EM>env_server_name</EM> are allowed for
+these asserters.</P>
+<P></P>
+<DT><STRONG><A NAME="item_single%2Dhost%2D%2ENET%2Dconsole"><STRONG>single-host-.NET-console</STRONG></A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_hosttails%2D%2ENET%2Dconsole"><STRONG>hosttails-.NET-console</STRONG></A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_hostregex%2D%2ENET%2Dconsole"><STRONG>hostregex-.NET-console</STRONG></A></STRONG><BR>
+<DD>
+Same as the asserters with titles without <EM>-.NET-console</EM> suffix, 
+with same options and semantics, but targeted for JavaScript programs for
+the .NET platform.
+The warning about program expiration is printed using <EM>print()</EM> function,
+and then the program is terminated.
+<P></P>
+<DT><STRONG><A NAME="item_single%2Dhost%2D%2ENET%2Dgui"><STRONG>single-host-.NET-gui</STRONG></A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_hosttails%2D%2ENET%2Dgui"><STRONG>hosttails-.NET-gui</STRONG></A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_hostregex%2D%2ENET%2Dgui"><STRONG>hostregex-.NET-gui</STRONG></A></STRONG><BR>
+<DD>
+Same as the asserters with titles without <EM>-.NET-gui</EM> suffix, 
+with same options and semantics, but targeted for JavaScript programs for
+the .NET platform.
+The warning about program expiration is shown in MessageBox,
+and then the program is terminated.
+<P></P></DL>
+<DT><STRONG><A NAME="item_%2DG_%3D_generic_asserters"><STRONG>-G</STRONG> = generic asserters</A></STRONG><BR>
+<DD>
+Generic asserters allow to insert custom checks and actions in the 
+highly-protected block of code. There are no requirement on the code at all, 
+no parsing of it is performed.
+<DL>
+<DT><STRONG><A NAME="item_asserter_from%2Dstring">asserter <STRONG>from-string</STRONG></A></STRONG><BR>
+<DD>
+This asserter has only one parameter - <STRONG>code</STRONG> - a string of custom code.
+<P></P>
+<DT><STRONG><A NAME="item_asserter_from%2Dfile">asserter <STRONG>from-file</STRONG></A></STRONG><BR>
+<DD>
+This asserter takes the code from file specified via <STRONG>filename</STRONG> parameter.
+<P></P></DL>
+<P>It's possible to use fake generic asserters with code <EM>' '</EM> (i.e. single
+space character) to make the analysis of the program more complex (since in
+case any asserter is used, some fraction of numeric expressions will be turned
+to arithmetic expressions involving constant variables initialized in the
+encoded block). This trick (passing <EM>-G from-string,code=' '</EM>) will make
+custom decompiler one will have to write to be able to analyze the code 
+much more complex.</P>
+<P>In order to report violation of licensing conditions, user's code to be
+executed depends on the target platform.</P>
+<P>For client-side Web scripts, the code should be:</P>
+<PRE>
+ eval(&quot;'&quot;);while(1) {;}</PRE>
+<P>For .NET environment, the code should be</P>
+<PRE>
+ Environment.Exit(102);</PRE>
+<P>For embedded .NET environment, the code should be</P>
+<PRE>
+ __stunnix_com_asserters_result=1;throw(1);</PRE>
+<P>The code of all other statements applicable for a target platform should
+be executed as well, e.g. <EM>Response.End()</EM> for ASP.</P>
+</DL>
+<DT><STRONG><A NAME="item_%2DO_profile%2Dparams"><STRONG>-O</STRONG> <EM>profile-params</EM></A></STRONG><BR>
+<DD>
+Tune the behaviour of the JavaScript Obfuscator for some specific dialect or 
+environment.
+<P>The argument is <EM>profile-params</EM>, that has the following syntax:</P>
+<P><EM>profile-name</EM>[,<EM>option</EM>=<EM>value</EM>]..</P>
+<P>There are several profiles available. The profile is selected
+by <EM>profile-name</EM>. Each
+profile can have options that alter its behaviour, in order to specify
+them the comma separated
+<EM>option</EM>=<EM>value</EM> pairs may follow <EM>profile-name</EM> after a comma.</P>
+<P>The following values for <EM>profile-name</EM> are available:</P>
+<DL>
+<DT><STRONG><A NAME="item_default"><EM>default</EM></A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_html"><EM>html</EM></A></STRONG><BR>
+<DD>
+Tune JavaScript Obfuscator for pure JavaScript language used in clientside scripts
+for WWW, preloading appropriate exceptions. 
+The names of these profiles are interchangable.
+<P></P>
+<DT><STRONG><A NAME="item_wsc"><EM>wsc</EM></A></STRONG><BR>
+<DD>
+This profile is designed for scripts for Windows Scripting Components 
+framework; it automatically loads necesarry exceptions.
+<P></P>
+<DT><STRONG><A NAME="item_wsh"><EM>wsh</EM></A></STRONG><BR>
+<DD>
+This profile is designed for scripts for Windows Scripting Host
+framework; it automatically loads necesarry exceptions.
+<P></P>
+<DT><STRONG><A NAME="item_asp"><EM>asp</EM></A></STRONG><BR>
+<DD>
+Tune JavaScript Obfuscator for pure JavaScript language used in serverside ASP 
+scripts, preloading appropriate exceptions, including exceptions for 
+MS ADO.
+<P></P>
+<DT><STRONG><A NAME="item_pure"><EM>pure</EM></A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_javascript"><EM>javascript</EM></A></STRONG><BR>
+<DD>
+Tune JavaScript Obfuscator for pure JavaScript language, without any exceptions 
+preloaded.
+The names of these profiles are interchangable. These are default profiles.
+<P></P>
+<DT><STRONG><A NAME="item_ecmascript"><EM>ecmascript</EM></A></STRONG><BR>
+<DD>
+Tune JavaScript Obfuscator for EcmaScript programs. This allows encoding of 
+scripting languages based directly on EcmaScript specification to function
+correctly, and also automatically loads list of exceptions specific to
+EcmaScript. Do not use this profile if using JavaScript Obfuscator 
+for JavaScript programs used in .NET environment, use profiles
+<EM>javascript.NET</EM> or <EM>javascript.NET-embedded</EM> instead.
+<P></P>
+<DT><STRONG><A NAME="item_javascript%2ENET"><EM>javascript.NET</EM></A></STRONG><BR>
+<DD>
+Tune JavaScript Obfuscator for JavaScript language used in .NET environment.
+This allows license conditions asserters to function properly
+in JavaScript programs for .NET environment processed with JavaScript Obfuscator.
+<P></P>
+<DT><STRONG><A NAME="item_javascript%2ENET%2Dembedded"><EM>javascript.NET-embedded</EM></A></STRONG><BR>
+<DD>
+Tune JavaScript Obfuscator for JavaScript language used in .NET environment for
+scripting applications. This is basically the same as <EM>javascript.NET</EM>
+profile, with only difference in behaviour in case license conditions are
+violated - using profile <EM>javascript.NET-embedded</EM> application won't
+be terminated by a call to <EM>Environment.Exit()</EM>, but will be terminated
+using other means.
+<P></P></DL>
+<P>The profile with name <EM>default</EM> is the default profile.</P>
+<P>All profiles have the following options (specified in the way options
+for manglers and extractors are specified):</P>
+<DL>
+<DT><STRONG><A NAME="item_handle%2Ddynamic%2Dscripts"><STRONG>handle-dynamic-scripts</STRONG></A></STRONG><BR>
+<DD>
+Specifies whether dynamic JavaScript code (the code generated on the fly)
+should be obfuscated.
+See the description of the option with the same name for <EM>asp</EM> extractor.
+<P></P>
+<DT><STRONG><A NAME="item_dynamic%2Dscripts%2Dby"><STRONG>dynamic-scripts-by</STRONG></A></STRONG><BR>
+<DD>
+Specifies names of objects and methods whoose arguments should be
+scanned for dynamic JavaScript code. 
+See the description of the option with the same name for <EM>asp</EM> extractor.
+<P></P></DL>
+<DT><STRONG><A NAME="item_%2DE_extractor%2Dparams"><STRONG>-E</STRONG> <EM>extractor-params</EM></A></STRONG><BR>
+<DD>
+Specify options for extractors.
+The argument is <EM>extractor-specification</EM>, that has the following syntax:
+<P><EM>extractor-title</EM>[,<EM>option</EM>=<EM>value</EM>]..</P>
+<P>There are several types of extractors. The extractor is selected
+by <EM>extractor-title</EM>. Each
+<EM>extractor</EM> can have options that alter its behaviour, in order to specify
+them the comma separated
+<EM>option</EM>=<EM>value</EM> pairs may follow <EM>extractor-title</EM> after a comma.</P>
+<P>There is a special extractor with title <EM>none</EM> available -
+when it's used, it's assumed that the input is raw JavaScript code (i.e.
+not embedded into any envelopes and not surrounded by any prefixes and 
+suffixes).</P>
+<P>When non-default extractor is used, JavaScript Obfuscator extracts JavaScript code 
+from the input using extractor-specific logic, processes the extracted
+JavaScript code (i.e. obfuscates and/or encodes it), and merges the 
+processed code into the original envelope/markup using extractor-specific
+logic.</P>
+<P>Here is a list of <EM>extractor-title</EM>s, with the options they support.</P>
+<DL>
+<DT><STRONG><A NAME="item_extractor_none">extractor <STRONG>none</STRONG></A></STRONG><BR>
+<DD>
+When this extractor is selected, it's assumed that the input is raw 
+JavaScript code (i.e. not embedded into any envelopes and not surrounded 
+by any prefixes).
+<P>This extractor doesn't have any options. This is the default extractor.</P>
+<P></P>
+<DT><STRONG><A NAME="item_extractor_html">extractor <STRONG>html</STRONG></A></STRONG><BR>
+<DD>
+When this extractor is selected, JavaScript Obfuscator assumes that input is html
+file with JavaScript code embedded into it. This JavaScript code is
+processed (obfuscated/encoded) in place according to all commandline 
+options given, and then it's merged back into original html file, replacing
+original fragments with obfuscated code.
+<P>The html file needn't be valid one with respect to HTML DTDs. 
+Names of elements and attributes 
+that are examined by the JavaScript Obfuscator (e.g. <EM>SCRIPT</EM>, <EM>onclick</EM> or
+<EM>language</EM>) can be written in any case, and even in the mixed ones.</P>
+<P>Code in the event handlers (e.g. specified using attribute <EM>onsubmit</EM>) 
+is processed too.</P>
+<P>Scripts inside constructs <EM>&lt;SCRIPT&gt;&lt;/SCRIPT&gt;</EM> and 
+<EM>&lt;SCRIPT&gt;&lt;!-- --&gt;&lt;/SCRIPT&gt;</EM>
+are supported.</P>
+<P>Scripts declared as written in the JavaScript using the attribute
+<EM>LANGUAGE</EM> are processed automatically. Scripts without any language specified
+are processed conditionally on the value of the option 
+<EM>untyped-script-supported</EM>. Scripts declared as written in the 
+language different from JavaScript using the attribute
+<EM>LANGUAGE</EM> are not processed at all (i.e. html source file can mix
+scripts in different languages).</P>
+<P>Emebdded ASP, PHP and SSI fragments are handled correctly, independant of
+their location - inside <EM>SCRIPT</EM> element (even inside string constants in 
+the scripts), inside body of the event handlers or inside list of attributes
+of any html element.</P>
+<P>Options:</P>
+<DL>
+<DT><STRONG><A NAME="item_untyped%2Dscript%2Dsupported"><STRONG>untyped-script-supported</STRONG></A></STRONG><BR>
+<DD>
+When this option has value <EM>1</EM>, all scripts inside <EM>SCRIPT</EM> tag without
+language specified using <EM>language</EM> attribute are also processed.
+The default value is <EM>1</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_simple%2Djsp%2Dsupport"><STRONG>simple-jsp-support</STRONG></A></STRONG><BR>
+<DD>
+Treat string argument of <EM>out.println()</EM> in JSPs 
+as client-side JavaScript code, and
+obfuscate JavaScript inside string constants. 
+The default value is <EM>0</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_do%2Dnot%2Dencode%2Dfragments"><STRONG>do-not-encode-fragments</STRONG></A></STRONG><BR>
+<DD>
+When this option has value <EM>0</EM>, all scripts inside <EM>SCRIPT</EM> tag are 
+encoded; if it has value <EM>1</EM>, scripts are not encoded. Handlers (scripts
+used inside <EM>onXXX</EM> attributes, e.g.  <EM>onsubmit</EM>) are not encoded in any
+case. The default value is <EM>1</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_include%2Ddecoder%2Donly%2Donce"><STRONG>include-decoder-only-once</STRONG></A></STRONG><BR>
+<DD>
+If the value of this option is 0, then decoder needs to be appended after 
+each encoded block. The decoder won't be appended if any asserter is used.
+If the code being encoded is bodies of the functions,  then this option
+should have value <EM>0</EM>. If the code being encoded is top-level code, then
+this option should have value <EM>1</EM>. The default value for this option is <EM>0</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_attributes%2Dlist%2Dfile"><STRONG>attributes-list-file</STRONG></A></STRONG><BR>
+<DD>
+Specifies the file with names of attributes in which scripts should be 
+obfuscated. By default contains name of file with names of all attributes 
+that can contain scripts according to HTML 4.01 specification.
+<P></P>
+<DT><STRONG><A NAME="item_skip%2Dscript%2Dmark%2Dattibute"><STRONG>skip-script-mark-attibute</STRONG></A></STRONG><BR>
+<DD>
+Specifies name of the attribute value of which indicates whether 
+content of the <EM>SCRIPT</EM> element to which it's applied should be ignored
+for processing by JavaScript Obfuscator. If the value of attribute with that name 
+is <EM>1</EM>, then it's content is not processed by JavaScript Obfuscator.
+The default value for this option is <EM>stunnix-obfus-skip</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_pack%2Dhtml"><STRONG>pack-html</STRONG></A></STRONG><BR>
+<DD>
+Specifies whether html itself should be packed to as few lines as possible,
+by removing extra spaces and line breaks. Note, removing of html comments 
+is controlled using <EM>remove-comments</EM> option.
+The default value for this option is <EM>0</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_charencode%2Dhtml%2Dtext"><STRONG>charencode-html-text</STRONG></A></STRONG><BR>
+<DD>
+Specifies whether all characters between tags are to be replaced
+with html entities, provided that option <STRONG>pack-html</STRONG> has value 1.
+The default value for this option is <EM>0</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_charencode%2Dhtml%2Dattrvals"><STRONG>charencode-html-attrvals</STRONG></A></STRONG><BR>
+<DD>
+Specifies whether characters in values of attributes are to be replaced
+with html entities, provided that option <STRONG>pack-html</STRONG> has value 1.
+The default value for this option is <EM>0</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_entities%2Dpercentage"><STRONG>entities-percentage</STRONG></A></STRONG><BR>
+<DD>
+Specifies the percentage of characters to be encoded as entities (whether
+encoding will be performed at all is determined by <EM>charencode-html-attrvals</EM>
+and <EM>charencode-html-attrvals</EM> options. It's recommended to keep value of this
+option below 100 since it when all characters are encoded, output looks less
+random. The default value for this option is <EM>50</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_transform%2Dtagnames"><STRONG>transform-tagnames</STRONG></A></STRONG><BR>
+<DD>
+Specifies how to transform tagnames (elemnt names). 
+<EM>none</EM> means don't transform, <EM>tolower</EM> means lowercase them, <EM>toupper</EM> means 
+uppercase them, <EM>mix</EM> means use random case for each of the characters,
+<EM>pairs</EM> means making each character with even index uppercase, and with 
+odd index - lowercase.
+The default value for this option is <EM>none</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_transform%2Dattrnames"><STRONG>transform-attrnames</STRONG></A></STRONG><BR>
+<DD>
+Specifies how to transform element names. 
+<EM>none</EM> means don't transform, <EM>tolower</EM> means lowercase them, <EM>toupper</EM> means 
+uppercase them, <EM>mix</EM> means use random case for each of the characters,
+<EM>pairs</EM> means making each character with even index uppercase, and with odd index - lowercase.
+The default value for this option is <EM>none</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_remove%2Dcomments"><STRONG>remove-comments</STRONG></A></STRONG><BR>
+<DD>
+Specifies whether html comments have to be removed. 
+The default value for this option is <EM>0</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_no%2Dcode"><STRONG>no-code</STRONG></A></STRONG><BR>
+<DD>
+Specifies whether to process any code in the file at all. 
+The default value for this option is <EM>0</EM> (meaning that code should be 
+handled).
+<P></P></DL>
+<DT><STRONG><A NAME="item_extractor_asp">extractor <STRONG>asp</STRONG></A></STRONG><BR>
+<DD>
+When this extractor is selected, JavaScript Obfuscator assumes that input is ASP
+(Active Server Pages) 
+file with JavaScript code embedded into it. This JavaScript code is
+processed (obfuscated/encoded) in place according to all commandline 
+options given, and then it's merged back into original file, replacing
+original fragments with obfuscated code.
+<P>When this extractor is selected, exceptions for pre-defined ASP objects and
+their methods (e.g. <EM>Response</EM>, <EM>Request</EM>, etc) and their methods and
+properties are preloaded.</P>
+<P>The asp file needn't be valid one with respect to HTML DTDs. 
+Names of elements and attributes 
+that are examined by the JavaScript Obfuscator (e.g. <EM>SCRIPT</EM>, <EM>runat</EM> or
+<EM>language</EM>) can be written in any case, and even in the mixed ones.</P>
+<P>Scripts inside constructs <EM>&lt;SCRIPT&gt;&lt;/SCRIPT&gt;</EM> and 
+<EM>&lt;SCRIPT&gt;&lt;!-- --&gt;&lt;/SCRIPT&gt;</EM>
+are supported, provided the <EM>SCRIPT</EM> element has attribute <EM>runat</EM> with 
+value <EM>server</EM> specified. Also code inside <EM>&lt;%</EM> and <EM>%&gt;</EM>
+(including proper support for code fragments begining with 
+<EM>&lt;%=</EM> and <EM>&lt;%#</EM> ) is processed.</P>
+<P>Scripts run at server and declared as written in the JavaScript using 
+the attribute
+<EM>LANGUAGE</EM> are processed automatically. Scripts 
+run at server and 
+without any language specified
+are processed conditionally on the value of the option 
+<EM>untyped-script-supported</EM>. Scripts declared as written in the 
+language different from JavaScript using the attribute
+<EM>LANGUAGE</EM> are not processed at all (i.e. html source file can mix
+scripts in different languages).</P>
+<P>Emebdded ASP, PHP and SSI fragments are handled correctly, independant of
+their location - inside <EM>SCRIPT</EM> element (even inside string constants in 
+the scripts), inside body of the event handlers or inside list of attributes
+of any html element.</P>
+<P>Options:</P>
+<DL>
+<DT><STRONG><STRONG>untyped-script-supported</STRONG></STRONG><BR>
+<DD>
+When this option has value <EM>1</EM>, all scripts 
+inside <EM>SCRIPT</EM> tag run at server  without
+language specified using <EM>language</EM> attribute are also processed.
+The default value is <EM>1</EM>.
+<P></P>
+<DT><STRONG><STRONG>do-not-encode-fragments</STRONG></STRONG><BR>
+<DD>
+When this option has value <EM>0</EM>, all scripts inside <EM>SCRIPT</EM> tag run at 
+server are 
+encoded; if it has value <EM>1</EM>, scripts are not encoded. 
+Code in fragments starting with <EM>&lt;%=</EM>  and with <EM>&lt;%#</EM> is never
+encoded. The default value is <EM>1</EM>.
+<P></P>
+<DT><STRONG><STRONG>include-decoder-only-once</STRONG></STRONG><BR>
+<DD>
+If the value of this option is 0, then decoder needs to be appended after 
+each encoded block. The decoder won't be appended if any asserter is used.
+If the code being encoded is bodies of the functions,  then this option
+should have value <EM>0</EM>. If the code being encoded is top-level code, then
+this option should have value <EM>1</EM>. The default value for this option is <EM>0</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_handle%2Dasp%2Dfragments"><STRONG>handle-asp-fragments</STRONG></A></STRONG><BR>
+<DD>
+Instructs whether to obfuscate/encode code between &lt;% and %&gt; (<EM>1</EM> - 
+obfuscate/encode, <EM>0</EM> - don't touch (i.e. process only scripts run at 
+server)). Default value is <EM>1</EM>.
+<P></P>
+<DT><STRONG><STRONG>skip-script-mark-attibute</STRONG></STRONG><BR>
+<DD>
+Specifies name of the attribute value of which indicates whether 
+content of the <EM>SCRIPT</EM> element to which it's applied should be ignored
+for processing by JavaScript Obfuscator. If the value of attribute with that name 
+is <EM>1</EM>, then it's content is not processed by JavaScript Obfuscator.
+The default value for this option is <EM>stunnix-obfus-skip</EM>.
+<P></P>
+<DT><STRONG><STRONG>pack-html</STRONG></STRONG><BR>
+<DD>
+Specifies whether html itself should be packed to as few lines as possible,
+by removing extra spaces and line breaks. Note, removing of html comments 
+is controlled using <EM>remove-comments</EM> option.
+The default value for this option is <EM>0</EM>.
+<P></P>
+<DT><STRONG><STRONG>remove-comments</STRONG></STRONG><BR>
+<DD>
+Specifies whether html comments have to be removed. 
+The default value for this option is <EM>0</EM>.
+<P></P>
+<DT><STRONG><STRONG>handle-dynamic-scripts</STRONG></STRONG><BR>
+<DD>
+<a name=_handle_dynamic_scripts></a><P>Specifies whether pieces of JavaScript code located inside 
+statements of server-side language that output client-side JavaScript should 
+be protected. The names of methods and objects whoose arguments are scanned
+for pieces of JavaScript are specified via <EM>dynamic-scripts-by</EM> option.
+The default value for this option is <EM>0</EM> (i.e. no dynamic scripts are
+recognized and processed).</P>
+<DT><STRONG><STRONG>dynamic-scripts-by</STRONG></STRONG><BR>
+<DD>
+<a name=_dynamic_scripts_by></a><P>If option <EM>handle-dynamic-scripts</EM> has value <EM>1</EM>, then the value of this
+option specifies list of method names (separated by plus sign) whoose arguments
+are treated as pieces of JavaScript code. It's possible to specify not
+only name of method, but also the name of object the method applies to - by
+specifying object name, the dot and the method name. E.g. the following
+value of the option - <EM>jsout.write+printdyncode</EM> - states that arguments of
+method or function named <EM>printdyncode</EM> and arguments of statements involving
+call of <EM>write</EM> method on <EM>jsout</EM> object will be treated as dynamic scripts
+and will be obfuscated. The default value is empty string.</P>
+</DL>
+<DT><STRONG><A NAME="item_extractor_wsc">extractor <STRONG>wsc</STRONG></A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_extractor_wsh">extractor <STRONG>wsh</STRONG></A></STRONG><BR>
+<DD>
+These are two different extractors, <STRONG>wsc</STRONG> for
+scripts for Windows Scripting Components 
+framework inside XML files, and <STRONG>wsh</STRONG>  is Windows Scripting Host
+framework. When using them, you have to gather a list of exceptions
+from WSC/WSH files using utility <EM>gen-ident-from-html.pl</EM> shipped
+with JavaScript Obfuscator, to generate list of IDs used inside various elements
+describing names of symbols global to the scripts. Values of
+<EM>internalName</EM> attribute will be obfuscated in WSC files. These extractors
+have similar sets of options:
+<DL>
+<DT><STRONG><STRONG>do-not-encode-fragments</STRONG></STRONG><BR>
+<DD>
+When this option has value <EM>0</EM>, all scripts inside <EM>SCRIPT</EM> tag run at 
+server are 
+encoded; if it has value <EM>1</EM>, scripts are not encoded. 
+The default value is <EM>1</EM>.
+<P></P>
+<DT><STRONG><STRONG>include-decoder-only-once</STRONG></STRONG><BR>
+<DD>
+If the value of this option is 0, then decoder needs to be appended after 
+each encoded block. The default value for this option is <EM>0</EM>.
+<P></P>
+<DT><STRONG><STRONG>skip-script-mark-attibute</STRONG></STRONG><BR>
+<DD>
+Specifies name of the attribute value of which indicates whether 
+content of the <EM>SCRIPT</EM> element to which it's applied should be ignored
+for processing by JavaScript Obfuscator. If the value of attribute with that name 
+is <EM>1</EM>, then it's content is not processed by JavaScript Obfuscator.
+The default value for this option is <EM>stunnix-obfus-skip</EM>.
+<P></P></DL>
+<DT><STRONG><A NAME="item_extractor_asp%2ENET">extractor <STRONG>asp.NET</STRONG></A></STRONG><BR>
+<DD>
+When this extractor is selected, JavaScript Obfuscator assumes that input is ASP.NET
+(Active Server Pages for .NET platform) 
+file with JavaScript code embedded into it. This JavaScript code is
+processed (obfuscated/encoded) in place according to all commandline 
+options given, and then it's merged back into original file, replacing
+original fragments with obfuscated code.
+<P>When this extractor is selected, exceptions for pre-defined ASP.NET objects and
+their methods (e.g. <EM>Response</EM>, <EM>Request</EM>, etc) and their methods and
+properties are preloaded.</P>
+<P>The asp.NET file needn't be valid one with respect to HTML DTDs. 
+Names of elements and attributes 
+that are examined by the JavaScript Obfuscator (e.g. <EM>SCRIPT</EM>, <EM>runat</EM>, 
+<EM>onserverclick</EM> or <EM>language</EM>) can be written in any case, and even in the 
+mixed ones.</P>
+<P>Scripts inside constructs <EM>&lt;SCRIPT&gt;&lt;/SCRIPT&gt;</EM> and 
+<EM>&lt;SCRIPT&gt;&lt;!-- --&gt;&lt;/SCRIPT&gt;</EM>
+are supported, provided the <EM>SCRIPT</EM> element has attribute <EM>runat</EM> with 
+value <EM>server</EM> specified. Also code inside <EM>&lt;%</EM> and <EM>%&gt;</EM>
+(including proper support for code fragments begining with 
+<EM>&lt;%=</EM> and <EM>&lt;%#</EM> ) is processed.  Also code in corresponding 
+attributes of serverside objects (ones declared with <EM>runat=server</EM>)  - e.g.
+<EM>onserverclick</EM> is processed.</P>
+<P>Scripts run at server and declared as written in the JavaScript using 
+the attribute
+<EM>LANGUAGE</EM> are processed automatically. Scripts 
+run at server and 
+without any language specified
+are processed conditionally on the value of the option 
+<EM>untyped-script-supported</EM>. Scripts declared as written in the 
+language different from JavaScript using the attribute
+<EM>LANGUAGE</EM> are not processed at all (i.e. html source file can mix
+scripts in different languages).</P>
+<P>Emebdded ASP, PHP and SSI fragments are handled correctly, independant of
+their location - inside <EM>SCRIPT</EM> element (even inside string constants in 
+the scripts), inside body of the event handlers or inside list of attributes
+of any html element.</P>
+<P>Options:</P>
+<DL>
+<DT><STRONG><STRONG>untyped-script-supported</STRONG></STRONG><BR>
+<DD>
+When this option has value <EM>1</EM>, all scripts 
+inside <EM>SCRIPT</EM> tag run at server  without
+language specified using <EM>language</EM> attribute are also processed.
+The default value is <EM>1</EM>.
+<P></P>
+<DT><STRONG><STRONG>do-not-encode-fragments</STRONG></STRONG><BR>
+<DD>
+When this option has value <EM>0</EM>, all scripts inside <EM>SCRIPT</EM> tag run at 
+server are 
+encoded; if it has value <EM>1</EM>, scripts are not encoded. 
+Code in fragments starting with <EM>&lt;%=</EM>  and with <EM>&lt;%#</EM> is never
+encoded. The default value is <EM>1</EM>.
+<P></P>
+<DT><STRONG><STRONG>include-decoder-only-once</STRONG></STRONG><BR>
+<DD>
+If the value of this option is 0, then decoder needs to be appended after 
+each encoded block. The decoder won't be appended if any asserter is used.
+If the code being encoded is bodies of the functions,  then this option
+should have value <EM>0</EM>. If the code being encoded is top-level code, then
+this option should have value <EM>1</EM>. The default value for this option is <EM>0</EM>.
+<P></P>
+<DT><STRONG><STRONG>handle-asp-fragments</STRONG></STRONG><BR>
+<DD>
+Instructs whether to obfuscate/encode code between &lt;% and %&gt; (<EM>1</EM> - 
+obfuscate/encode, <EM>0</EM> - don't touch (i.e. process only scripts run at 
+server and in attributes specifying handlers)). Default value is <EM>1</EM>.
+<P></P>
+<DT><STRONG><STRONG>attributes-list-file</STRONG></STRONG><BR>
+<DD>
+Specifies the file with names of attributes in which scripts should be 
+obfuscated. By default contains name of file with names of all attributes 
+that can contain serverside scripts according to ASP.NET control reference
+(includes <EM>onserverclick</EM> and <EM>onserverchange</EM> currently).
+<P></P>
+<DT><STRONG><STRONG>skip-script-mark-attibute</STRONG></STRONG><BR>
+<DD>
+Specifies name of the attribute value of which indicates whether 
+content of the <EM>SCRIPT</EM> element to which it's applied should be ignored
+for processing by JavaScript Obfuscator. If the value of attribute with that name 
+is <EM>1</EM>, then it's content is not processed by JavaScript Obfuscator.
+The default value for this option is <EM>stunnix-obfus-skip</EM>.
+<P></P>
+<DT><STRONG><STRONG>pack-html</STRONG></STRONG><BR>
+<DD>
+Specifies whether html itself should be packed to as few lines as possible,
+by removing extra spaces and line breaks. Note, removing of html comments 
+is controlled using <EM>remove-comments</EM> option.
+The default value for this option is <EM>0</EM>.
+<P></P>
+<DT><STRONG><STRONG>remove-comments</STRONG></STRONG><BR>
+<DD>
+Specifies whether html comments have to be removed. 
+The default value for this option is <EM>0</EM>.
+<P></P>
+<DT><STRONG><STRONG>handle-dynamic-scripts</STRONG></STRONG><BR>
+<DD>
+See the description of the option with the same name for <EM>asp</EM> extractor.
+<P></P>
+<DT><STRONG><STRONG>dynamic-scripts-by</STRONG></STRONG><BR>
+<DD>
+See the description of the option with the same name for <EM>asp</EM> extractor.
+<P></P></DL>
+<DT><STRONG><A NAME="item_extractor_code">extractor <STRONG>code</STRONG></A></STRONG><BR>
+<DD>
+This extractor allows to support partial encoding of the code - i.e. 
+selectively applying encoding to arbtirary number of blocks of orignal
+source code. It assumes that its input is usual JavaScript  with 
+two types of special comments embedded, <EM>/*STUNNIX-OBFUS-ENCODED-BEGIN*/</EM> 
+and <EM>/*STUNNIX-OBFUS-ENCODED-END*/</EM>. Everything between 
+<EM>/*STUNNIX-OBFUS-ENCODED-BEGIN*/</EM>  and <EM>/*STUNNIX-OBFUS-ENCODED-END*/</EM>
+will be encoded, everything outside of them won't be encoded. This
+extractor has only one option - <STRONG>include-decoder-only-once</STRONG>, see its 
+description in the description of obfuscator <STRONG>html</STRONG>.
+<P></P></DL>
+<DT><STRONG><A NAME="item_extractor_delimited">extractor <STRONG>delimited</STRONG></A></STRONG><BR>
+<DD>
+This extractor allows to protect JavaScript code inside file with any syntax,
+provided that pieces of JavaScript code are surrounded by special markers.
+Arbitrary strings, not containing newlines, can be used as those markers.
+Lists of markers, one per line, are loaded from files. List of strings that denote
+start of JavaScript code are loaded from file specified using <STRONG>file-with-start-delimiters</STRONG>
+option. 
+List of strings that denote
+end of JavaScript code are loaded from file specified using <STRONG>file-with-end-delimiters</STRONG>
+option. 
+It's possible to encode each piece of JavaScript by setting value of option
+<STRONG>do-not-encode-fragments</STRONG> to 0. If the file has XML syntax (so XML special characters
+like &amp;, &lt; and &gt; are quoted using &amp;amp;, &amp;lt; or &amp;gt; entities, set the value of
+option <STRONG>xml-escape-code</STRONG> to 1.
+<P>Options are:</P>
+<DL>
+<DT><STRONG><STRONG>do-not-encode-fragments</STRONG></STRONG><BR>
+<DD>
+When this option has value <EM>0</EM>, all pieces of JavaScript  are encoded.
+If it has value <EM>1</EM>, scripts are not encoded. The default value is <EM>1</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_xml%2Descape%2Dcode"><STRONG>xml-escape-code</STRONG></A></STRONG><BR>
+<DD>
+If the value of this option is 1, XML entities like &amp;amp; are converted to the
+real characters before getting to the JavaScript  parser; after obfuscation
+and possible encoding, those XML-unsafe characters are converted back to entities.
+The default value for this option is <EM>0</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_file%2Dwith%2Dstart%2Ddelimiters"><STRONG>file-with-start-delimiters</STRONG></A></STRONG><BR>
+<DD>
+<DT><STRONG><A NAME="item_file%2Dwith%2Dend%2Ddelimiters"><STRONG>file-with-end-delimiters</STRONG></A></STRONG><BR>
+<DD>
+These two options specify names of files with delimiters, specified one per line.
+Any of the delimiters can mark the begining of  JavaScript code, and any of delimiters
+from file specified by  <STRONG>file-with-end-delimiters</STRONG> can terminate piece of JavaScript code.
+The number of lines in those 2 files need not be the same. These 2 options are required
+to be set - there are no default values for them.
+<P></P></DL>
+<DT><STRONG><A NAME="item_extractor_rawXsp">extractor <STRONG>rawXsp</STRONG></A></STRONG><BR>
+<DD>
+This extractor allows to protect JavaScript code inside files, that are basically
+raw JavaScript files, but contain ASP, JSP, PHP, ASP.NET or SSI blocks.
+Don't confuse it with HTML where script is surrounded by html markup, and
+is enclosed by SCRIPT tags - use <STRONG>html</STRONG> extractor in that case. Use it for raw
+ JavaScript generated by server-side language only.
+<P>This extractor has no options.</P>
+<P></P>
+<DT><STRONG><A NAME="item_extractor_othercode">extractor <STRONG>othercode</STRONG></A></STRONG><BR>
+<DD>
+This extractor allows to protect JavaScript inside string constants of some other
+programming language (e.g. Java or C# or C++) - called ``outer'' language for short. 
+The outer language won't be touched at all. This extractor has only one option - 
+<STRONG>dynamic-scripts-by</STRONG>, see its  description in the description of obfuscator <STRONG>html</STRONG>.
+E.g. if you need to obfuscate  JavaScript inside arguments of the functions
+Outstream.MyPrint and OutStream.MyWrite in the java, you will have to add:
+
+<PRE>
+
+    -E othercode,dynamic-scripts-by=Outstream.MyPrint+OutStream.MyWrite</PRE>
+<P>to the commandline of the obfuscator. The   JavaScript needs to be located inside
+string constant. String constant may use ' or `` for delimiter (depending on the
+outer language) and even can contain C-style quoting using backslashes.</P>
+<P></P></DL>
+<P>
+<HR>
+<H1><A NAME="return value">RETURN VALUE</A></H1>
+<P>In case of an error, the exit code will be non-zero, otherwise the
+exit code will be zero.</P>
+<P>
+<HR>
+<H1><A NAME="diagnostics">DIAGNOSTICS</A></H1>
+<P>On successful processing of the file its obfuscated and/or encoded version
+will be printed to stdout or saved to file specifed with <STRONG>-o</STRONG> commandline
+option. 
+The processing will stop
+if there is a syntax error in the file being obfuscated or in the file
+it uses - in that case location and details of syntax error will be
+printed to stderr.</P>
+<P>
+<HR>
+<H1><A NAME="examples">EXAMPLES</A></H1>
+<P>The following commandline obfuscates and encodes file <EM>blah.js</EM> using default 
+parameters and exceptions from file named <EM>./excepts</EM>, 
+writing obfuscated and encoded version to <EM>oblah.js</EM>:</P>
+<PRE>
+    js-obfus blah.js -o oblah.js -x ./excepts</PRE>
+<P>The following commandline is recommended way of obfuscating file 
+<EM>blah.js</EM> for shipping using default parameters and exceptions from file 
+named <EM>./excepts</EM>, writing obfuscated and encoded version to <EM>oblah.js</EM> (the main
+difference from previous example is passing the value of the <STRONG>seed</STRONG> 
+parameter for obfuscator routine for symbol names):</P>
+<PRE>
+    js-obfus blah.js -o oblah.js -x ./excepts -i md5,seed=SomeRandomString</PRE>
+<P>The following commandline is a recommended for producing the mildly-obfuscated
+non-encoded version of the  <EM>blah.js</EM> that is ideal for testing whether the obfuscated
+code  has no problems like use of undefined symbols (that may arise due to
+insufficiently complete list of exceptions in file <EM>./excepts</EM>) :</P>
+<PRE>
+    js-obfus blah.js -e 0 -o oblah.js -x ./excepts -n none -s none -i prefix,str=ZZZ</PRE>
+<P>The following commandlines are a sample of passing same set values for all options
+to the <STRONG>md5</STRONG> obfuscator routine for symbol names. It obfuscates and encodes
+file <EM>blah.js</EM>, writing obfuscated and encoded version of the file to <EM>oblah.js</EM>:</P>
+<PRE>
+    js-obfus blah.js -o oblah.js -i md5,seed=57823,prefix=p,len=5
+    js-obfus blah.js -o oblah.js -i 'md5,prefix=p, seed=57823 , len=5'</PRE>
+<P>The following example obfuscates and encodes file <EM>blah.js</EM>, 
+writing obfuscated and encoded version of the file to <EM>oblah.js</EM>,
+with embedding code for license checking that allows the code to be executed
+when document script is integrated into is served from servers
+with names ending <EM>.site.com</EM> or from <EM>site.com</EM> 
+itself till 28 April 2005; upon expiration
+of the code default message is printed:</P>
+<PRE>
+    js-obfus blah.js -o oblah.js 
+        -T 'expire,whenexpires=28 April 2005,onviolated-warn=1' 
+        -H hosttails,matches=site.com+.site.com,onviolated-warn=1</PRE>
+<P>
+<HR>
+<H1><A NAME="files">FILES</A></H1>
+<P>It's possible to store the default commandline options in the globally-visible
+file <EM>$instroot/lib/js-obfus/js-obfus-settings.pl</EM> (where <STRONG>$instroot</STRONG>
+is a directory in which the JavaScript Obfuscator package was installed to) 
+which is a Perl module. 
+This file defines one sub <EM>cmnargs</EM> that should return a list of
+options to  be prepended to actual commandline the js-obfus, thus allowing to store
+``persistent settings'' for js-obfus.</P>
+<P>
+<HR>
+<H1><A NAME="notes">NOTES</A></H1>
+<P>In most cases, once properly prepared for obfuscation, obfuscated version 
+of the code should work the same as non-obfuscated. 
+After fixing the issues with incomplete
+set of exceptions, it's recommended to check whether ofbuscated code behaves
+exactly the same as original - by using pre-existing testsuite or 
+checking functionality manually.</P>
+<P>If some obfuscated code is syntaxically correct but works differently
+than original version , 
+obfuscate it without encoding and string, integer and ident mangling 
+as following:</P>
+<PRE>
+    js-obfus -i none -s none -n none -jam 1 -e 0</PRE>
+<P>Then try to run it again. If it still does not work correctly, find the source 
+file which is guilty by replacing each of the obfuscated files with original
+ones one by one. After you have found the file that contains the problem, 
+append the definitions of all functions from the source file to that target
+file and by temporary renaming function names in the appended part 
+to something else (e.g. by suffixing 
+the names with '1' or 'blah') you will
+be able to find the function that is guilty. Same process can be applied to
+the blocks in the guilty function too (just replace obfuscated parts with
+source parts) to find out which part of the obfuscate function is misbehaving.</P>
+<P>Having found the function block that misbehaves, that block should be
+modified in order the obfuscated version to have the same functionality
+as original code.</P>
+
+</BODY>
+
+</HTML>

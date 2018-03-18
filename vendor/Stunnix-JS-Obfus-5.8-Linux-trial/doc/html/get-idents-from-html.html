@@ -1,0 +1,118 @@
+<HTML>
+<HEAD>
+<TITLE>get-idents-from-html.pl - a script to gather a names and ids of elements
+used inside a set of html files.</TITLE>
+<LINK REV="made" HREF="mailto:bhcompile@daffy.perf.redhat.com">
+</HEAD>
+
+<BODY>
+
+<A NAME="__index__"></A>
+<!-- INDEX BEGIN -->
+
+<UL>
+
+	<LI><A HREF="#name">NAME</A></LI>
+	<LI><A HREF="#synopsis">SYNOPSIS</A></LI>
+	<LI><A HREF="#description">DESCRIPTION</A></LI>
+	<LI><A HREF="#options">OPTIONS</A></LI>
+</UL>
+<!-- INDEX END -->
+
+<HR>
+<P>
+<HR>
+<H1><A NAME="name">NAME</A></H1>
+<P>get-idents-from-html.pl - a script to gather a names and ids of elements
+used inside a set of html files.</P>
+<P>
+<HR>
+<H1><A NAME="synopsis">SYNOPSIS</A></H1>
+<P><STRONG>get-idents-from-html.pl</STRONG> 
+    [&nbsp;<STRONG>--for-ids=names-of-elements-to-take-ID-from</STRONG>&nbsp;]
+    [&nbsp;<STRONG>--for-names=names-of-elements-to-take-NAME-from</STRONG>&nbsp;]
+    [&nbsp;<STRONG>-i</STRONG>&nbsp;]&nbsp;[&nbsp;<STRONG>--runat</STRONG>&nbsp;<EM>client</EM>|<EM>any</EM>|<EM>server</EM>&nbsp;]&nbsp; 
+    [&nbsp;<STRONG>-l=file-name-with-list-of-src-files</STRONG>&nbsp;]&nbsp;[&nbsp;<STRONG>--do-not-merge</STRONG>&nbsp;]&nbsp;
+    <EM>destfile</EM>&nbsp;<EM>srchtmlfiles</EM>..</P>
+<P>
+<HR>
+<H1><A NAME="description">DESCRIPTION</A></H1>
+<P>If your script referers to form fields by their names (using them as properties
+in case of JavaScript or by exporting them as variables into special namespace
+in case of e.g. Perl), there needs to be a way to form a list of names of form 
+fields to use it as a set of exceptions. This utility is just for this purpose - 
+for extracting names and ids of html elements - from their <STRONG>NAME</STRONG> and <STRONG>ID</STRONG>
+attributes; it puts resultant list of processing <EM>srchtmlfiles</EM> to the 
+<EM>destfile</EM> in sorted form, one symbol on each line.</P>
+<P>The <EM>srchtmlfiles</EM> processed needn't be valid HTML - they can even be XML 
+files, no balancing of tags and allowance of containment is checked. The
+names of elements and attributes can be in any case, even mixed case is OK.</P>
+<P>By default, values of all attributes with name <STRONG>NAME</STRONG> (except <STRONG>A</STRONG>) are 
+extracted; also values of all attributes with name <STRONG>ID</STRONG> are extracted too. 
+It's  possible to specify the exact list of names (as a comma-separated 
+list specified as a single string) of elements from which
+to extract values of <STRONG>NAME</STRONG> attribute using commandline option <STRONG>--for-names</STRONG>,
+and names of elements from which
+to extract values of <STRONG>ID</STRONG> attribute using commandline option <STRONG>--for-ids</STRONG>.
+Values of corresponding attributes not looking like identifier are ignored.</P>
+<P>It's possible ignore the case of extracted symbol names, by adding option
+<STRONG>-i</STRONG> - in this case encountering e.g. form fields with ids <EM>E1</EM> and <EM>e1</EM> 
+will be  result in a single line <EM>e1</EM> to be output to the resultant file.</P>
+<P>By default, elements with attribute <STRONG>runat</STRONG> with value <EM>server</EM> (used by
+ASP and ASP.NET for marking server-side objects) are ignored. It's also 
+possible to request to also analyze them, or to analyze only elements with
+<EM>runat=server</EM> by the use of <STRONG>--runat</STRONG> commandline option.</P>
+<P>
+<HR>
+<H1><A NAME="options">OPTIONS</A></H1>
+<DL>
+<DT><STRONG><A NAME="item_%2D%2Dfor%2Dids%3Dnames%2Dof%2Delements%2Dto%2Dtak"><STRONG>--for-ids=names-of-elements-to-take-ID-from</STRONG></A></STRONG><BR>
+<DD>
+Specify the list of elements from which to take the value of attribute <STRONG>ID</STRONG>.
+The <EM>names-of-elements-to-take-ID-from</EM> is a string that is 
+comma-separated list of element names in to be inspected, e.g 
+<CODE>object,select,input</CODE>.
+By default the value of attribute <STRONG>ID</STRONG> is taken from all elements that have
+attribute with this name specified.
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Dfor%2Dnames%3Dnames%2Dof%2Delements%2Dto%2Dt"><STRONG>--for-names=names-of-elements-to-take-NAME-from</STRONG></A></STRONG><BR>
+<DD>
+Specify the list of elements from which to take the value of attribute <STRONG>NAME</STRONG>.
+The <EM>names-of-elements-to-take-NAME-from</EM> is a string that is 
+comma-separated list of  lement names in to be inspected, e.g 
+<CODE>object,select,input</CODE>.
+By default the value of attribute <STRONG>NAME</STRONG> is taken from all elements that have
+attribute with this name specified, except element with name <STRONG>A</STRONG>.
+<P></P>
+<DT><STRONG><A NAME="item_%2Di"><STRONG>-i</STRONG></A></STRONG><BR>
+<DD>
+Passing this option requests not to distinguish the case of aggregated 
+symbols - all extracted symbols are mapped to lowercase and then duplicates 
+are ignored. By default case is preserved.
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Drunat_client%7Cany%7Cserver"><STRONG>--runat</STRONG> <EM>client</EM>|<EM>any</EM>|<EM>server</EM></A></STRONG><BR>
+<DD>
+Specify the interest in server-side objects. 
+By default, elements with attribute <STRONG>runat</STRONG> with value <EM>server</EM> (used by
+ASP and ASP.NET for marking server-side objects) are ignored (this mode
+can be activated by passing value <EM>client</EM> to this option). It's also 
+possible to request to also analyze such elements 
+by passing value <EM>any</EM> to this option, or to analyze only elements with
+<EM>runat=server</EM> by passing value <EM>server</EM> to this option. The default value
+for this option is <EM>client</EM>.
+<P></P>
+<DT><STRONG><A NAME="item_%2Dl%3Dfile%2Dname%2Dwith%2Dlist%2Dof%2Dsrc%2Dfile"><STRONG>-l=file-name-with-list-of-src-files</STRONG></A></STRONG><BR>
+<DD>
+Specify the name of file containing names of files to be processed.
+Names of files should be one per line. Text after # on each line will be
+ignored.
+<P></P>
+<DT><STRONG><A NAME="item_%2D%2Ddo%2Dnot%2Dmerge"><STRONG>--do-not-merge</STRONG></A></STRONG><BR>
+<DD>
+Instructs not to merge the content of <EM>destfile</EM> with list of extracted
+symbols.
+<P></P></DL>
+
+</BODY>
+
+</HTML>

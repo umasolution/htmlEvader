@@ -1,0 +1,123 @@
+-> First time configuration
+
+	install {./deps}
+
+	Need to change below line with environment specific path
+	On shell execute "npm bin" and replace the output path
+	obfuscate-js.py:30:NODE_JS_BIN_DIR  = "/home/mitesh/node_modules/.bin"          # $ npm bin
+
+
+	Tools is Tested on
+	mitesh@mitesh-ThinkPad-T430:~/temp$ lsb_release -a
+	No LSB modules are available.
+	Distributor ID:	Ubuntu
+	Description:	Ubuntu 16.04.3 LTS
+	Release:	16.04
+	Codename:	xenial
+
+
+
+-> To obfuscate single file
+
+	obfuscate-js.py
+
+	mitesh@mitesh-ThinkPad-T430:~/temp$ ./obfuscate-js.py -h
+	Usage: obfuscate-js.py [options]
+
+	Options:
+	  -h, --help            show this help message and exit
+	  -i inputfile, --inputfile=inputfile
+				Path to input html/js file
+	  -t filetype, --filetype=filetype
+				File type  html or js
+	  -o outdir, --outdir=outdir
+				Directory where to put output files
+	  -d debug, --debug=debug
+				Debug
+	  -e OBFUSCATIONTYPE, --obfuscationtype=OBFUSCATIONTYPE
+				obfuscationtype supported
+				aaencode
+				babel-minify
+				closure
+				code-protect
+				confusion
+				jfogs
+				jfogs-reverse
+				jjencode
+				jsbeautifier
+				jsmin
+				js-obfuscator
+				qzx-obfuscator
+				scripts_encryptor
+				stunnix
+				uglifyjs-es
+
+	Example: ./obfuscate-js.py -i {path_to_html_or_js_file} -o {path_to_output_directory}  -t {html/js}  -e {obfucation_type}
+
+
+
+-> To obfuscate list of files
+
+	mitesh@mitesh-ThinkPad-T430:~/temp$ ./obfuscate-files.py -h
+	Usage: obfuscate-files.py [options]
+
+	Options:
+	  -h, --help            show this help message and exit
+	  -a inabspath, --absolute-path-for-input-files=inabspath
+				Absolute path to all input files
+	  -i inputfile, --inputfile=inputfile
+				Path to input file which contains filelist to
+				obfuscate
+	  -o outdir, --outdir=outdir
+				Directory where to put output files
+	  -d donotdelete, --donotdelete-directory-on-failure=donotdelete
+				do no delete directory on failure
+	  -e OBFUSCATIONTYPE, --obfuscationtype=OBFUSCATIONTYPE
+				obfuscationtype supported
+				aaencode
+				babel-minify
+				closure
+				code-protect
+				confusion
+				jfogs
+				jfogs-reverse
+				jjencode
+				jsbeautifier
+				jsmin
+				js-obfuscator
+				qzx-obfuscator
+				scripts_encryptor
+				stunnix
+				uglifyjs-es
+				all [*Default]
+
+
+	Example:
+	./obfuscate-files.py -a {abs_path_of_top_dir} -i {file_containing_list_of_input_files} -o {path_to_output_dir} -e {obfucation_type or all}
+
+	O) If below files needs to be obfuscated
+
+
+		/home/versa/html_files/folder1/index.html
+		/home/versa/html_files/folder1/poc.html
+		/home/versa/html_files/folder2/lol.js
+
+
+	O) Here are the possible arguments to the script
+
+		-a : /home/versa/html_files/
+		-i : /home/versa/html_files/file_list
+		     >> cat file_list
+			folder1/index.html
+			folder1/poc.html
+			folder2/lol.js
+
+		-o : /tmp/obfuscated_output
+		-e : all
+
+
+
+
+
+
+

@@ -1,0 +1,43 @@
+<HTML>
+<HEAD>
+<TITLE>copy-stunnix-project-manager-mode-props.pl - copy settings of some mode in Project Manager project file, 
+from one project file to another one.</TITLE>
+<LINK REV="made" HREF="mailto:bhcompile@daffy.perf.redhat.com">
+</HEAD>
+
+<BODY>
+
+<A NAME="__index__"></A>
+<!-- INDEX BEGIN -->
+
+<UL>
+
+	<LI><A HREF="#name">NAME</A></LI>
+	<LI><A HREF="#synopsis">SYNOPSIS</A></LI>
+	<LI><A HREF="#description">DESCRIPTION</A></LI>
+</UL>
+<!-- INDEX END -->
+
+<HR>
+<P>
+<HR>
+<H1><A NAME="name">NAME</A></H1>
+<P>copy-stunnix-project-manager-mode-props.pl - copy settings of some mode in Project Manager project file, 
+from one project file (with .op extension) to another one.</P>
+<P>
+<HR>
+<H1><A NAME="synopsis">SYNOPSIS</A></H1>
+<P><STRONG>copy-stunnix-project-manager-mode-props.pl</STRONG>  <EM>source-file</EM> <EM>destination-file</EM> [&nbsp;mode-id&nbsp;]</P>
+<P>
+<HR>
+<H1><A NAME="description">DESCRIPTION</A></H1>
+<P>Use this script to copy settings of some mode in Project Manager project file, from one project file (with .op 
+extension) to another one.</P>
+<P>By default, settings for mode named 'standard: treat as rawcode' are copied. If you need to copy settings of other 
+mode, pass the ID of that mode as a 3rd argument to this script. To find ID of the mode, go to Settings, Edit modes,
+copy the link to that mode to clipboard, paste to some text editor, strip everything before last dot, and you 
+will get its mode-id, e.g. for <A HREF="http://127.0.0.1:9000/obf-ui-cxxo/ui.xpl/1/modes.edit._rawcode">http://127.0.0.1:9000/obf-ui-cxxo/ui.xpl/1/modes.edit._rawcode</A> mode id is '_rawcode'.</P>
+
+</BODY>
+
+</HTML>

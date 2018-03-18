@@ -1,0 +1,16 @@
+NAME
+    extract-syms-from-dir.pl - Extract symbols defined in all files residing
+    in specified directory
+
+SYNOPSIS
+    extract-syms-from-dir.pl *dirname* [ regular-expression ]
+
+DESCRIPTION
+    This script finds all symbols declared in all files residing in
+    specified directory. It prints those symbols on its standard output, one
+    per line (so it is suitable for using as exceptions).
+
+    It does exactly what default page Tools,
+    Extract symbols from directory with source files command in Stunnix
+    Obfuscator Project Manager does, with default settings.
+

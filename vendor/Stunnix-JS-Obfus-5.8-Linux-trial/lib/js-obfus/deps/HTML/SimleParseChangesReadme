@@ -1,0 +1,8 @@
+The 'SimpleParse2.pm' is modified version of SimpleParse.pm from
+HTML::SimpleParse package version 0.12. The differences between it and 
+original version is more robust handling of broken html, and more properties
+it extracts about html being parsed (mostly to avoid reparsing its output
+for extraction of attributes or exact names of closing html tags). Also support
+for event of type 'aspblock' was added.
+Also support for empty tags (like <br/>) and for namespaces for elements and
+attributes.

@@ -1,0 +1,85 @@
+NAME
+    get-idents-from-html.pl - a script to gather a names and ids of elements
+    used inside a set of html files.
+
+SYNOPSIS
+    get-idents-from-html.pl [ --for-ids=names-of-elements-to-take-ID-from ]
+    [ --for-names=names-of-elements-to-take-NAME-from ]
+    [ -i ] [ --runat *client*|*any*|*server* ] 
+    [ -l=file-name-with-list-of-src-files ] [ --do-not-merge ] 
+    *destfile* *srchtmlfiles*..
+
+DESCRIPTION
+    If your script referers to form fields by their names (using them as
+    properties in case of JavaScript or by exporting them as variables into
+    special namespace in case of e.g. Perl), there needs to be a way to form
+    a list of names of form fields to use it as a set of exceptions. This
+    utility is just for this purpose - for extracting names and ids of html
+    elements - from their NAME and ID attributes; it puts resultant list of
+    processing *srchtmlfiles* to the *destfile* in sorted form, one symbol
+    on each line.
+
+    The *srchtmlfiles* processed needn't be valid HTML - they can even be
+    XML files, no balancing of tags and allowance of containment is checked.
+    The names of elements and attributes can be in any case, even mixed case
+    is OK.
+
+    By default, values of all attributes with name NAME (except A) are
+    extracted; also values of all attributes with name ID are extracted too.
+    It's possible to specify the exact list of names (as a comma-separated
+    list specified as a single string) of elements from which to extract
+    values of NAME attribute using commandline option --for-names, and names
+    of elements from which to extract values of ID attribute using
+    commandline option --for-ids. Values of corresponding attributes not
+    looking like identifier are ignored.
+
+    It's possible ignore the case of extracted symbol names, by adding
+    option -i - in this case encountering e.g. form fields with ids *E1* and
+    *e1* will be result in a single line *e1* to be output to the resultant
+    file.
+
+    By default, elements with attribute runat with value *server* (used by
+    ASP and ASP.NET for marking server-side objects) are ignored. It's also
+    possible to request to also analyze them, or to analyze only elements
+    with *runat=server* by the use of --runat commandline option.
+
+OPTIONS
+    --for-ids=names-of-elements-to-take-ID-from
+        Specify the list of elements from which to take the value of
+        attribute ID. The *names-of-elements-to-take-ID-from* is a string
+        that is comma-separated list of element names in to be inspected,
+        e.g "object,select,input". By default the value of attribute ID is
+        taken from all elements that have attribute with this name
+        specified.
+
+    --for-names=names-of-elements-to-take-NAME-from
+        Specify the list of elements from which to take the value of
+        attribute NAME. The *names-of-elements-to-take-NAME-from* is a
+        string that is comma-separated list of lement names in to be
+        inspected, e.g "object,select,input". By default the value of
+        attribute NAME is taken from all elements that have attribute with
+        this name specified, except element with name A.
+
+    -i  Passing this option requests not to distinguish the case of
+        aggregated symbols - all extracted symbols are mapped to lowercase
+        and then duplicates are ignored. By default case is preserved.
+
+    --runat *client*|*any*|*server*
+        Specify the interest in server-side objects. By default, elements
+        with attribute runat with value *server* (used by ASP and ASP.NET
+        for marking server-side objects) are ignored (this mode can be
+        activated by passing value *client* to this option). It's also
+        possible to request to also analyze such elements by passing value
+        *any* to this option, or to analyze only elements with
+        *runat=server* by passing value *server* to this option. The default
+        value for this option is *client*.
+
+    -l=file-name-with-list-of-src-files
+        Specify the name of file containing names of files to be processed.
+        Names of files should be one per line. Text after # on each line
+        will be ignored.
+
+    --do-not-merge
+        Instructs not to merge the content of *destfile* with list of
+        extracted symbols.
+

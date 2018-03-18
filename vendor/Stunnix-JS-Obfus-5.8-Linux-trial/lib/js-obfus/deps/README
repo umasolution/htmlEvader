@@ -1,0 +1,10 @@
+These are snapshots of the external dependencies of the perl-obfus suite, in
+order for perl-obfus to work even if such dependencies are not installed
+on the user's system. These modules are pure perl code, without any 
+CPU-specific backends.
+
+The versions of the packages avaiable here are:
+
+Digest-Perl-MD5-1.5
+ParseLex-2.15
+Time-modules-101.062101

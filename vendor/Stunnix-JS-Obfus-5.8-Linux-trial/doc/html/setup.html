@@ -1,0 +1,84 @@
+<HTML>
+<HEAD>
+<TITLE>No Title</TITLE>
+<LINK REV="made" HREF="mailto:bhcompile@daffy.perf.redhat.com">
+</HEAD>
+
+<BODY>
+
+<A NAME="__index__"></A>
+<!-- INDEX BEGIN -->
+
+<UL>
+
+	<LI><A HREF="#requirements">REQUIREMENTS</A></LI>
+	<LI><A HREF="#installation steps">INSTALLATION STEPS</A></LI>
+	<LI><A HREF="#notes">NOTES</A></LI>
+</UL>
+<!-- INDEX END -->
+
+<HR>
+<P>
+<H1><A NAME="requirements">REQUIREMENTS</A></H1>
+<P><STRONG>Stunnix JS-Obfus</STRONG> is a suite of Perl applications.
+It requires a working Perl interpreter version 5.8.x installed somewhere in your system.
+It can be downloaded for free e.g. from here: 
+    <A HREF="http://downloads.activestate.com/ActivePerl/Windows/5.8/">http://downloads.activestate.com/ActivePerl/Windows/5.8/</A></P>
+<P>No additional Perl modules are required for running <STRONG>Stunnix
+JS-Obfus</STRONG>.</P>
+<P>
+<HR>
+<H1><A NAME="installation steps">INSTALLATION STEPS</A></H1>
+<P>Since <STRONG>Stunnix JS-Obfus</STRONG> is a pure Perl application, it is as portable as
+Perl itself (i.e. it will run on most Unix OSes, Windows, and MacOS). 
+It is distributed as a .tar.gz (gzip'ed tar archive) that
+should be extracted to any directory you like. On Windows platforms,
+tar.gz files can be extracted using trial version of WinZIP or
+RAR archiver from 
+    <A HREF="http://www.rarlabs.com">http://www.rarlabs.com</A></P>
+<P>For Windows users it's highly recommended to unpack <STRONG>Stunnix JS-Obfus</STRONG>
+to the directory with name <STRONG>not</STRONG> containing any spaces.</P>
+<P>If you are not upgrading the previous version of
+the <STRONG>Stunnix JS-Obfus</STRONG>, you have to invoke the <EM>setup.pl</EM> script from 
+the <EM>lib/js-obfus/</EM> directory, like this.</P>
+<PRE>
+    perl setup.pl</PRE>
+<P>On Windows platforms it's enough to open folder <EM>lib/js-obfus/</EM> in
+Explorer and double-click on file <EM>setup.pl</EM>.</P>
+<P>That script will display the license, upon accepting it it will 
+ask for registration
+code you've received when purchasing <STRONG>Stunnix JS-Obfus</STRONG> 
+; it will write a special file with default configuration to 
+<EM>lib/js-obfus/js-obfus-settings.pl</EM> that will be read by <EM>js-obfus</EM>
+on each invokation. On Windows platforms it will also create a folder
+<STRONG>Stunnix JS-Obfus</STRONG> in the <STRONG>Programs</STRONG> folder of the <EM>Start</EM> menu.
+At the end of installation on Windows platforms, you will be presented
+with ability to immediately start Project Manager - an advanced User Interface 
+for <STRONG>Stunnix JS-Obfus</STRONG>.</P>
+<P>It's not recommended to run the <EM>setup.pl</EM> script 
+if you are upgrading from the previous version of <STRONG>Stunnix JS-Obfus</STRONG>,
+unless otherwise is stated in the release notes for new version of this
+product.</P>
+<P>After these steps <STRONG>Stunnix JS-Obfus</STRONG> is ready for use.</P>
+<P>For users of Windows platforms: when upgrading from a version of 
+<STRONG>Stunnix JS-Obfus</STRONG> that didn't contain Project Manager, you have to 
+open <EM>lib/js-obfus/utils/</EM> folder in Explorer and execute 
+<EM>setupwin32.pl</EM> by double-clicking on it in order to add folder for
+<STRONG>Stunnix JS-Obfus</STRONG> to <STRONG>Programs</STRONG> menu.</P>
+<P>Stunnix Project Manager can be started at any moment on any platform
+by executing <EM>bin/startui.pl</EM> (Windows users may just use menu items
+in <STRONG>Programs</STRONG> menu or visit <EM>bin/</EM> folder with Explorer and double-click
+on <EM>startui.pl</EM>).</P>
+<P>
+<HR>
+<H1><A NAME="notes">NOTES</A></H1>
+<P>In case you'll let the <EM>setup.pl</EM> script to overwrite 
+<EM>lib/js-obfus/js-obfus-settings.pl</EM> during installation of new 
+version of <STRONG>Stunnix JS-Obfus</STRONG>, you'll have to ship all JavaScript
+code of software obfuscated entirely by the new version of JS-Obfus 
+to your customers once you need to distribute an update to them (instead
+of just sending the files corresponding to ones that were modified).</P>
+
+</BODY>
+
+</HTML>

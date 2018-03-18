@@ -1,0 +1,22 @@
+NAME
+    copy-stunnix-project-manager-mode-props.pl - copy settings of some mode
+    in Project Manager project file, from one project file (with .op
+    extension) to another one.
+
+SYNOPSIS
+    copy-stunnix-project-manager-mode-props.pl *source-file*
+    *destination-file* [ mode-id ]
+
+DESCRIPTION
+    Use this script to copy settings of some mode in Project Manager project
+    file, from one project file (with .op extension) to another one.
+
+    By default, settings for mode named 'standard: treat as rawcode' are
+    copied. If you need to copy settings of other mode, pass the ID of that
+    mode as a 3rd argument to this script. To find ID of the mode, go to
+    Settings, Edit modes, copy the link to that mode to clipboard, paste to
+    some text editor, strip everything before last dot, and you will get its
+    mode-id, e.g. for
+    http://127.0.0.1:9000/obf-ui-cxxo/ui.xpl/1/modes.edit._rawcode mode id
+    is '_rawcode'.
+

@@ -1,0 +1,63 @@
+REQUIREMENTS
+    Stunnix JS-Obfus is a suite of Perl applications. It requires a working
+    Perl interpreter version 5.8.x installed somewhere in your system. It
+    can be downloaded for free e.g. from here:
+    http://downloads.activestate.com/ActivePerl/Windows/5.8/
+
+    No additional Perl modules are required for running Stunnix JS-Obfus.
+
+INSTALLATION STEPS
+    Since Stunnix JS-Obfus is a pure Perl application, it is as portable as
+    Perl itself (i.e. it will run on most Unix OSes, Windows, and MacOS). It
+    is distributed as a .tar.gz (gzip'ed tar archive) that should be
+    extracted to any directory you like. On Windows platforms, tar.gz files
+    can be extracted using trial version of WinZIP or RAR archiver from
+    http://www.rarlabs.com
+
+    For Windows users it's highly recommended to unpack Stunnix JS-Obfus to
+    the directory with name not containing any spaces.
+
+    If you are not upgrading the previous version of the Stunnix JS-Obfus,
+    you have to invoke the setup.pl script from the lib/js-obfus/ directory,
+    like this.
+
+        perl setup.pl
+
+    On Windows platforms it's enough to open folder lib/js-obfus/ in
+    Explorer and double-click on file setup.pl.
+
+    That script will display the license, upon accepting it it will ask for
+    registration code you've received when purchasing Stunnix JS-Obfus ; it
+    will write a special file with default configuration to
+    lib/js-obfus/js-obfus-settings.pl that will be read by js-obfus on each
+    invokation. On Windows platforms it will also create a folder Stunnix
+    JS-Obfus in the Programs folder of the Start menu. At the end of
+    installation on Windows platforms, you will be presented with ability to
+    immediately start Project Manager - an advanced User Interface for
+    Stunnix JS-Obfus.
+
+    It's not recommended to run the setup.pl script if you are upgrading
+    from the previous version of Stunnix JS-Obfus, unless otherwise is
+    stated in the release notes for new version of this product.
+
+    After these steps Stunnix JS-Obfus is ready for use.
+
+    For users of Windows platforms: when upgrading from a version of Stunnix
+    JS-Obfus that didn't contain Project Manager, you have to open
+    lib/js-obfus/utils/ folder in Explorer and execute setupwin32.pl by
+    double-clicking on it in order to add folder for Stunnix JS-Obfus to
+    Programs menu.
+
+    Stunnix Project Manager can be started at any moment on any platform by
+    executing bin/startui.pl (Windows users may just use menu items in
+    Programs menu or visit bin/ folder with Explorer and double-click on
+    startui.pl).
+
+NOTES
+    In case you'll let the setup.pl script to overwrite
+    lib/js-obfus/js-obfus-settings.pl during installation of new version of
+    Stunnix JS-Obfus, you'll have to ship all JavaScript code of software
+    obfuscated entirely by the new version of JS-Obfus to your customers
+    once you need to distribute an update to them (instead of just sending
+    the files corresponding to ones that were modified).
+
