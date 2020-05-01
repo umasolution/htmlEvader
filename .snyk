@@ -1,0 +1,132 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.14.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-generator > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-traverse > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-template > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-core > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-register > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - inquirer > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-generator > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-traverse > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-template > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-core > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-core > babel-generator > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-template > babel-traverse > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-core > babel-traverse > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-helpers > babel-template > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-core > babel-template > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-minify > babel-core > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-register > babel-core > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-core > babel-register > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - opencollective > inquirer > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-core > babel-generator > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-template > babel-traverse > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-core > babel-traverse > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-helpers > babel-template > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-core > babel-template > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-minify > babel-core > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-register > babel-core > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-minify > babel-core > babel-generator > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-register > babel-core > babel-generator > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-helpers > babel-template > babel-traverse > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-core > babel-template > babel-traverse > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-minify > babel-core > babel-traverse > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-register > babel-core > babel-traverse > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-core > babel-helpers > babel-template > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-minify > babel-core > babel-template > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-register > babel-core > babel-template > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-minify > babel-core > babel-register > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - javascript-obfuscator > opencollective > inquirer > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - qzx-obfuscator > opencollective > inquirer > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-minify > babel-core > babel-generator > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-register > babel-core > babel-generator > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-helpers > babel-template > babel-traverse > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-core > babel-template > babel-traverse > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-minify > babel-core > babel-traverse > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-register > babel-core > babel-traverse > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-core > babel-helpers > babel-template > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-minify > babel-core > babel-template > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-register > babel-core > babel-template > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-core > babel-helpers > babel-template > babel-traverse > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-minify > babel-core > babel-template > babel-traverse > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-register > babel-core > babel-template > babel-traverse > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-minify > babel-core > babel-helpers > babel-template > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-register > babel-core > babel-helpers > babel-template > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-core > babel-helpers > babel-template > babel-traverse > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-minify > babel-core > babel-template > babel-traverse > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-register > babel-core > babel-template > babel-traverse > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-minify > babel-core > babel-helpers > babel-template > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-register > babel-core > babel-helpers > babel-template > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-minify > babel-core > babel-helpers > babel-template > babel-traverse > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-register > babel-core > babel-helpers > babel-template > babel-traverse > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-minify > babel-core > babel-helpers > babel-template > babel-traverse > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
+    - babel-register > babel-core > babel-helpers > babel-template > babel-traverse > babel-types > lodash:
+        patched: '2020-05-01T04:02:20.096Z'
