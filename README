@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fumasolution%2FhtmlEvader.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fumasolution%2FhtmlEvader?ref=badge_shield)
+
 -> First time configuration
 
 	install {./deps}
@@ -121,3 +123,7 @@
 
 
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fumasolution%2FhtmlEvader.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fumasolution%2FhtmlEvader?ref=badge_large)
