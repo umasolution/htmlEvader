@@ -1,0 +1,49 @@
+name: xmake build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build-linux
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y g++ libssl-dev libgtest-dev
+
+    - name: setup xmake
+      uses: xmake-io/github-action-setup-xmake@v1
+      with:
+        xmake-version: latest
+
+    - name: pull code
+      uses: actions/checkout@v2
+
+    - name: xmake
+      run: |
+        xmake -r
+        xmake -g test
+        xmake -g tutorial
+        xmake -g benchmark
+
+    - name : run shared
+      run: |
+        xmake f -k shared
+        xmake -r
+        xmake -g test
+        xmake -g tutorial
+        xmake -g benchmark
+
+    - name: Check PR title
+      run: |
+        title="${{ github.event.pull_request.title }}"
+        if [[ $title =~ ^octocat ]]; then
+        echo "PR title starts with 'octocat'"
+        exit 0
+        else
+        echo "PR title did not start with 'octocat'"
+        exit 1
+        fi
